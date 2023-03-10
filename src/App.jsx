@@ -4,6 +4,7 @@ import 'firebase/compat/firestore';
 import 'firebase/compat/auth';  
 import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import { useCollectionData } from "react-firebase-hooks/firestore"
 
 
 firebase.initializeApp({
@@ -37,10 +38,52 @@ function Signin() {
   return (
     
     <div className=''>
-        <button onClick={Login}>Signin</button>
+        <button onClick={Login}>Signin With Google</button>
     </div>
   )
 }
+function Signout(){
+  return auth.currentUser && (
+    <button onClick={() => auth.signOut()}>SignOut</button>
+  )
+}
 
-
+function Chatroom(){
+  
+  const messageRef = firestore.collection("message");
+  const query = messageRef.orderBy('createdAt').limit(25);
+  const [formValue,setFormValue] = useState('');
+  const sendMessage=(e) => {
+    e.preventDefault();
+    const {uid} = auth.currentUser;
+  
+    messageRef.add({
+      text:formValue,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      uid,
+    });
+  
+    setFormValue('');
+  }
+  const [messages] = useCollectionData(query,{idField: 'id'});
+  return(
+    <div>
+      <Signout />
+      <div>
+        {messages && messages.map(msg => <Chatmessage key={msg.id} message={msg} /> )}
+      </div>
+      <div>
+        <form onSubmit={sendMessage}>
+          <input value={formValue} onChange={(e) => setFormValue(e.target.value)}></input>
+        </form>
+      </div>
+    </div>
+  )
+}
+function Chatmessage(props){
+  const {text ,uid} = props.message;
+  return (
+    <p>{text}</p>
+  )
+}
 export default App;
