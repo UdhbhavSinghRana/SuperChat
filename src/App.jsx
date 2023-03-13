@@ -66,11 +66,13 @@ function Chatroom(){
     setFormValue('');
   }
   const [messages] = useCollectionData(query,{idField: 'id'});
+  {messages && messages.map((message) => console.log(message.id))}
+
   return(
-    <div>
+    <div className=''>
       <Signout />
       <div>
-        {messages && messages.map(msg => <Chatmessage key={msg.id} message={msg} /> )}
+        {messages && messages.map(msg => <Chatmessage  key={msg.id} message={msg} /> )}
       </div>
       <div>
         <form onSubmit={sendMessage}>
@@ -81,9 +83,20 @@ function Chatroom(){
   )
 }
 function Chatmessage(props){
-  const {text ,uid} = props.message;
-  return (
-    <p>{text}</p>
+const [user] = useAuthState(auth);
+const {text ,uid} = props.message;
+console.log(uid);
+console.log(user.uid);
+
+if(uid === user.uid){
+  return(
+    <p>send {text}</p>
   )
 }
+else{
+  return(
+    <p>received {text}</p>
+  )
+}
+} 
 export default App;
