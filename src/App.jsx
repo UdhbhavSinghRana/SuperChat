@@ -1,4 +1,5 @@
 import React from 'react';
+import SuperChat from './assets/SuperChat.png';
 import firebase from 'firebase/compat/app'; 
 import 'firebase/compat/firestore';
 import 'firebase/compat/auth';  
@@ -46,14 +47,19 @@ function Signout(){
     <button onClick={() => auth.signOut()}>SignOut</button>
   )
 }
+function SignPop(){
+  return(
+    <div className=''>
+      hello 
+    </div>
+  )
+}
 function Header() {
   const [user] = useAuthState(auth);
   const img = user.photoURL;
   return (
-    <div className='flex '>
-      <img src={img}  className="h-10 rounded-full "></img>
-      <div className='px-2'>{user.displayName}</div>
-      
+    <div className='flex px-5'>
+      <button onClick={SignPop}><img src={img}  className="h-10 rounded-full " ></img> </button>
     </div>
   )
 }
@@ -62,7 +68,7 @@ function Chatroom(){
   
   const [user] = useAuthState(auth);
   const messageRef = firestore.collection("message");
-  const query = messageRef.orderBy('createdAt').limit(25);
+  const query = messageRef.orderBy('createdAt');
   const [formValue,setFormValue] = useState('');
   
   const sendMessage=(e) => {
@@ -85,12 +91,17 @@ function Chatroom(){
   {messages && messages.map((message) => console.log(message.id))}
 
   return(
-    <div className='bg-slate-800 h-full min-h-screen text-white '>
-          <div className='flex justify-between px-4 py-4 shadow-lg'>
+    <div className='bg-slate-800 h-full min-h-screen text-white  '>
+      <div className='flex justify-between shadow-lg'>
+          <div className='my-4 mx-2'> 
+            <img typeof='image' src={SuperChat} className="h-10"></img>
+          </div>
+          <div className='flex justify-end px-4 py-4 '>
           <Header />
           <Signout />
           </div>
-        <div className='flex flex-col items-center'>
+      </div>
+        <div className='flex flex-col items-center '>
           <div >
             {messages && messages.map(msg => <Chatmessage  key={msg.id} message={msg} /> )}
           </div>
@@ -119,7 +130,7 @@ if(uid === user.uid){
 else{
   return(
     <div className='flex '>
-    <img src={image} alt="A" className="h-14 rounded-full"></img>
+    <img src={image}  className="h-14 rounded-full"></img>
     <p className='px-2'>recived {text}</p>
     </div>
   )
