@@ -97,17 +97,17 @@ function Chatroom(){
             <img typeof='image' src={SuperChat} className="h-10"></img>
           </div>
           <div className='flex justify-end px-4 py-4 '>
-          <Header />
-          <Signout />
+              <Header />
+              <Signout />
           </div>
       </div>
-        <div className='flex flex-col items-center '>
-          <div >
+        <div className='flex flex-col items-center pb-10 pt-7'>
+          <div className="w-2/5">
             {messages && messages.map(msg => <Chatmessage  key={msg.id} message={msg} /> )}
           </div>
-          <div>
+          <div className="w-1/3">
             <form onSubmit={sendMessage}>
-              <input value={formValue} onChange={(e) => setFormValue(e.target.value)}></input>
+              <input value={formValue} className="w-full p-1 bg-[#64748b] rounded-md" onChange={(e) => setFormValue(e.target.value)}></input>
             </form>
           </div>
         </div>
@@ -121,17 +121,17 @@ const {text ,uid,image} = props.message;
 console.log(image); 
 if(uid === user.uid){
   return(
-    <div className='flex '>
-    <img src={image}  className="h-14 rounded-full"></img>
-    <p className='px-2'>send {text}</p>
+    <div className='flex my-5 justify-end items-center'>
+        <p className='px-3'>{text}</p>
+        <img src={image}  className="h-14 rounded-full"></img>
     </div>
   )
 }
 else{
   return(
-    <div className='flex '>
-    <img src={image}  className="h-14 rounded-full"></img>
-    <p className='px-2'>recived {text}</p>
+    <div className='flex my-5 items-center'>
+    <img src={image} className="h-14 rounded-full"></img>
+    <p className='px-3'>{text}</p>
     </div>
   )
 }
