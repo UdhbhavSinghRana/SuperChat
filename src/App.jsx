@@ -7,6 +7,9 @@ import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import Popup from 'reactjs-popup';
+import { useRef } from 'react';
+
+document.body.className="overflow-hidden";
 
 firebase.initializeApp({
   apiKey: "AIzaSyAGphO1Py7e8WRhvNGh8--6IZe0jTZpG8w",
@@ -84,6 +87,7 @@ function Chatroom(){
   
   const sendMessage=(e) => {
     e.preventDefault();
+    titleRef.current.scrollIntoView({ behavior: "smooth" });
     if(formValue === ''){
       return;
     }
@@ -95,15 +99,15 @@ function Chatroom(){
       uid,
       image:user.photoURL
     });
-  
     setFormValue('');
   }
   const [messages] = useCollectionData(query,{idField: 'id'});
   {messages && messages.map((message) => console.log(message.id))}
+  const titleRef = useRef();
 
   return(
-    <div className='bg-slate-800 h-full min-h-screen text-white  '>
-      <div className='flex justify-between shadow-lg'>
+    <div className='bg-[url("./assets/bg.svg")] bg-contain h-full  text-white '>
+      <div className='flex justify-between shadow-lg sticky'>
           <div className='my-4 mx-2'> 
             <img typeof='image' src={SuperChat} className="h-10"></img>
           </div>
@@ -111,15 +115,17 @@ function Chatroom(){
               <Header />
           </div>
       </div>
-        <div className='flex flex-col items-center pb-10 pt-7'>
-          <div className="w-2/5">
+        <div className='flex flex-col items-center pb-10 '>
+        <div  className='w-2/5 overflow-auto min-h-full h-screen scroll-smooth container-snap'>
+          <div className="" >
             {messages && messages.map(msg => <Chatmessage  key={msg.id} message={msg} /> )}
           </div>
-          <div className="w-1/3">
+          <div className="w-full h-fit" ref={titleRef}>
             <form onSubmit={sendMessage}>
-              <input value={formValue} className="w-full p-1 bg-[#64748b] rounded-md" onChange={(e) => setFormValue(e.target.value)}></input>
+              <input value={formValue} className="w-full p-1 bg-[#051e2b] rounded-md" onChange={(e) => setFormValue(e.target.value)}></input>
             </form>
           </div>
+        </div>
         </div>
     </div>
   )
@@ -131,7 +137,7 @@ const {text ,uid,image} = props.message;
 console.log(image); 
 if(uid === user.uid){
   return(
-    <div className='flex my-5 justify-end items-center'>
+    <div className='flex my-5 justify-end items-center '>
         <p className='px-3'>{text}</p>
         <img src={image}  className="h-14 rounded-full"></img>
     </div>
