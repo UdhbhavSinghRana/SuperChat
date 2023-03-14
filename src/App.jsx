@@ -5,7 +5,8 @@ import 'firebase/compat/firestore';
 import 'firebase/compat/auth';  
 import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollectionData } from "react-firebase-hooks/firestore"
+import { useCollectionData } from "react-firebase-hooks/firestore";
+import Popup from 'reactjs-popup';
 
 firebase.initializeApp({
   apiKey: "AIzaSyAGphO1Py7e8WRhvNGh8--6IZe0jTZpG8w",
@@ -47,19 +48,29 @@ function Signout(){
     <button onClick={() => auth.signOut()}>SignOut</button>
   )
 }
-function SignPop(){
-  return(
-    <div className=''>
-      hello 
-    </div>
-  )
-}
+
 function Header() {
   const [user] = useAuthState(auth);
   const img = user.photoURL;
   return (
     <div className='flex px-5'>
-      <button onClick={SignPop}><img src={img}  className="h-10 rounded-full " ></img> </button>
+      <Popup trigger={<button><img src={img}  className="h-10 rounded-full" ></img> </button>}> 
+        <div className='flex  bg-slate-100 rounded-lg h-52 w-96 absolute right-1'>
+          <div className='w-full border-b-2 mx-2 bg-white h-2/3 '>
+            <div className='flex items-center  rounded-2xl h-20'>
+              <img src={user.photoURL} className="rounded-full w-16 mx-3 h-16"></img>
+              <div className='text-xs flex flex-col '>
+                <p className='font-semibold'>{user.displayName}</p>
+                <p className='text-slate-900'>{user.email}</p>
+              </div>
+            </div>
+            <div className='border-2 hover:bg-slate-200 w-'>
+              <button className='py-2 font-semibold  w-full'>Manage your Account</button>
+            </div>
+            <div className='py-5 '><button className='border-2 px-2 py-2 rounded-xl hover:bg-slate-200' onClick={Signout}> <Signout /></button></div>
+          </div>
+        </div>
+       </Popup>
     </div>
   )
 }
@@ -98,7 +109,6 @@ function Chatroom(){
           </div>
           <div className='flex justify-end px-4 py-4 '>
               <Header />
-              <Signout />
           </div>
       </div>
         <div className='flex flex-col items-center pb-10 pt-7'>
