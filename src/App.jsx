@@ -43,11 +43,6 @@ function Signin() {
     </div>
   )
 }
-function Signout(){
-  return auth.currentUser && (
-    <button onClick={() => auth.signOut()}>SignOut</button>
-  )
-}
 
 function Header() {
   const [user] = useAuthState(auth);
@@ -71,7 +66,7 @@ function Header() {
             </div>
           </div>
           <div id="bottom-section" className='h-1/3 flex items-center'>
-            <button className="border-2 border-gray-300 p-2 rounded-lg hover:bg-gray-300 onClick={Signout}">SignOut</button>
+            <button className="border-2 border-gray-300 p-2 rounded-lg hover:bg-gray-300 " onClick={() => auth.signOut()}>SignOut</button>
           </div>
         </div>
       </Popup>
