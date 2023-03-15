@@ -55,22 +55,26 @@ function Header() {
   return (
     <div className='flex px-5'>
       <Popup trigger={<button><img src={img}  className="h-10 rounded-full" ></img> </button>}> 
-        <div className='flex  bg-slate-100 rounded-lg h-52 w-96 absolute right-1'>
-          <div className='w-full border-b-2 mx-2 bg-white h-2/3 '>
-            <div className='flex items-center  rounded-2xl h-20'>
-              <img src={user.photoURL} className="rounded-full w-16 mx-3 h-16"></img>
-              <div className='text-xs flex flex-col '>
-                <p className='font-semibold'>{user.displayName}</p>
-                <p className='text-slate-900'>{user.email}</p>
+        <div className='flex flex-col justify-between bg-slate-100 rounded-lg w-96 absolute right-1 p-4 subpixel-antialiased'>
+          <div id="top-section" className='h-2/3 flex flex-col justify-around p-2 border-b-2 border-slate-200/80 mb-4'>
+            <div id="user" className="flex">
+              <img className="rounded-full h-16 w-16 mr-4" src={user.photoURL} />
+              <div id="user-info-div" className="flex items-center">
+                <div id="user-info">
+                  <div id="user-info-name" className="font-semibold">{user.displayName}</div>
+                  <div id="user-info-email" className="font-light text-sm">{user.email}</div>
+                </div>
               </div>
             </div>
-            <div className='border-2 hover:bg-slate-200 w-'>
-              <button className='py-2 font-semibold  w-full'>Manage your Account</button>
+            <div id="manage-account" className="flex justify-center items-center py-2 border-2 border-gray-300 rounded-full mt-4 mb-2 hover:bg-gray-300 hover:cursor-pointer">
+              Manage account
             </div>
-            <div className='py-5 '><button className='border-2 px-2 py-2 rounded-xl hover:bg-slate-200' onClick={Signout}> <Signout /></button></div>
+          </div>
+          <div id="bottom-section" className='h-1/3 flex items-center'>
+            <button className="border-2 border-gray-300 p-2 rounded-lg hover:bg-gray-300 onClick={Signout}">SignOut</button>
           </div>
         </div>
-       </Popup>
+      </Popup>
     </div>
   )
 }
