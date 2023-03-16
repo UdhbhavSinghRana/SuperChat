@@ -139,7 +139,7 @@ function Chatroom() {
                         <form onSubmit={sendMessage}>
                             <input
                                 value={formValue}
-                                className="w-full p-1 bg-[#051e2b] rounded-md"
+                                className="w-full py-2 px-5 mt-3 mb-5 bg-[#051e2b] rounded-md focus:outline-none"
                                 onChange={(e) => setFormValue(e.target.value)}></input>
                         </form>
                     </div>
