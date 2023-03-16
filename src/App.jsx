@@ -9,7 +9,7 @@ import {useCollectionData} from "react-firebase-hooks/firestore";
 import Popup from 'reactjs-popup';
 import {useRef} from 'react';
 
-document.body.className = "overflow-hidden";
+document.body.className = "container-snap scroll-smooth overflow-auto";
 
 firebase.initializeApp({
     apiKey: "AIzaSyAGphO1Py7e8WRhvNGh8--6IZe0jTZpG8w",
@@ -43,9 +43,11 @@ function Signin() {
         auth.signInWithPopup(provider);
     }
     return (
+        <>
         <div className=''>
             <button onClick={Login}>Signin With Google</button>
         </div>
+        </>
     )
 }
 
@@ -53,7 +55,7 @@ function Header() {
     const [user] = useAuthState(auth);
     const img = user.photoURL;
     return (
-        <div className='flex px-5'>
+        <div className='flex px-5 '>
             <Popup trigger={<button> <img src={img} className="h-10 rounded-full"></img> </button>}>
                 <div
                     className='flex flex-col justify-between bg-slate-100 rounded-lg w-96 absolute right-1 p-4 subpixel-antialiased'>
@@ -95,9 +97,7 @@ function Chatroom() {
         setFormValue] = useState('');
     const sendMessage = (e) => {
         e.preventDefault();
-        titleRef
-            .current
-            .scrollIntoView({behavior: "smooth"});
+        titleRef.current.scrollIntoView({behavior: "smooth"});
         if (formValue === '') {
             return;
         }
@@ -118,11 +118,11 @@ function Chatroom() {
     {
         messages && messages.map((message) => console.log(message.id))
     }
-    const titleRef = useRef();
+    const titleRef = useRef('');
 
     return (
         <div className='bg-[url("./assets/bg.svg")] bg-cover h-full  text-white '>
-            <div className='flex justify-between shadow-lg  w-full opacity-100 '>
+            <div className='flex justify-between shadow-lg  w-full opacity-100 sticky top-0'>
                 <div className='my-4 mx-2'>
                     <img typeof='image' src={SuperChat} className="h-10"></img>
                 </div>
@@ -131,11 +131,11 @@ function Chatroom() {
                 </div>
             </div>
             <div className='flex flex-col items-center'>
-                <div className='w-2/5 overflow-scroll h-screen scroll-smooth container-snap'>
+                <div className='md:w-2/5 w-4/5 overflow-scroll h-screen scroll-smooth container-snap'>
                     <div className="">
                         {messages && messages.map(msg => <Chatmessage key={msg.id} message={msg}/>)}
                     </div>
-                    <div className="w-full mt-5 mb-24" ref={titleRef}>
+                    <div className="w-full mt-5 " ref={titleRef}>
                         <form onSubmit={sendMessage}>
                             <input
                                 value={formValue}
@@ -152,7 +152,6 @@ function Chatmessage(props) {
     const [user] = useAuthState(auth);
     const {text, uid, image} = props.message;
 
-    console.log(image);
     if (uid === user.uid) {
         return (
             <div className='flex my-5 justify-end items-center '>
