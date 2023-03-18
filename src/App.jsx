@@ -16,13 +16,13 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 document.body.className = "scroll-smooth overflow-clip ";
 
 firebase.initializeApp({
-    apiKey: "AIzaSyAGphO1Py7e8WRhvNGh8--6IZe0jTZpG8w",
-    authDomain: "superchat-15642.firebaseapp.com",
-    projectId: "superchat-15642",
-    storageBucket: "superchat-15642.appspot.com",
-    messagingSenderId: "880959806508",
-    appId: "1:880959806508:web:7ebda4f65f6de4b0144589",
-    measurementId: "G-VY0Y2SJDRY"
+    apiKey: `${import.meta.env.VITE_API_KEY}`,
+    authDomain: `${import.meta.env.VITE_AUTH_DOMAIN}`,
+    projectId: `${import.meta.env.VITE_PROJECT_ID}`,
+    storageBucket: `${import.meta.env.VITE_STORAGE_BUCKET}`,
+    messagingSenderId: `${import.meta.env.VITE_MESSAGING_SENDER_ID}`,
+    appId: `${import.meta.env.VITE_APP_ID}`,
+    measurementId: `${import.meta.env.VITE_MEASUREMENT_ID}` 
 })
 
 const auth = firebase.auth();
