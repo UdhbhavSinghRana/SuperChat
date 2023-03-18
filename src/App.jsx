@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import SuperChat from './assets/SuperChat.png';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
@@ -8,8 +8,12 @@ import {useAuthState} from 'react-firebase-hooks/auth';
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import Popup from 'reactjs-popup';
 import {useRef} from 'react';
+import { IconButton } from '@material-ui/core';
+import Google from './assets/Google.svg';
+import { Password } from '@mui/icons-material';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
-document.body.className = "container-snap scroll-smooth overflow-auto";
+document.body.className = "scroll-smooth overflow-clip ";
 
 firebase.initializeApp({
     apiKey: "AIzaSyAGphO1Py7e8WRhvNGh8--6IZe0jTZpG8w",
@@ -25,6 +29,7 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 
 function App() {
+    
     const [user] = useAuthState(auth);
     return (
         <div>
@@ -36,16 +41,70 @@ function App() {
 }
 
 function Signin() {
+    const [name,SetName] = useState('');
+    const [email,SetEmail] = useState('');
+    const [password,SetPassword] = useState('');
     const Login = () => {
         const provider = new firebase
             .auth
             .GoogleAuthProvider();
         auth.signInWithPopup(provider);
     }
+    const SignWithEmail = (e) => {
+        if(!name) return alert("Please enter name")
+        e.preventDefault();
+        auth.
+        createUserWithEmailAndPassword(email,password).
+        then((userAuth) => {
+            console.log(userAuth);
+            userAuth.user.
+            updateProfile({
+                displayName:name,
+            })
+        })
+        
+    }
     return (
         <>
-        <div className=''>
-            <button onClick={Login}>Signin With Google</button>
+        <div className='h-screen flex justify-center items-center '>
+            <div className='h-4/5 w-2/3 flex shadow-2xl'>
+                <div className='w-1/2 bg-[url("./assets/SignIn.svg")] font-black'>
+                    <div className='flex flex-col justify-center items-center h-full  text-white text-center'>
+                        <div className='text-5xl'>
+                            Welcome Back
+                        </div>
+                        <div className='h-1/5 py-2 flex px-10 text-md'>
+                            Join the conversation and explore new horizons with our chat community.
+                        </div>
+                        <div className='text-xl hover:text-blue-300'>
+                            <button>
+                                SignIn
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className='w-1/2  '>
+                    <div className='flex flex-col py-20 items-center h-full'>
+                        <div className=' text-5xl font-black'>
+                            Create Account
+                        </div>
+                        <div className='py-7 flex flex-col items-center w-full'>
+                            <button onClick={Login}>
+                                <img src={Google} className="h-10 w-10"></img>
+                            </button>
+                            <div className='w-full'>
+                                <form className='py-14 w-full flex flex-col justify-center items-center gap-5' >
+                                    <input className='bg-slate-200 w-3/5 rounded-xl px-3 py-2 focus:outline-none' placeholder='Username' onChange={(e) => SetName(e.target.value)}></input>
+                                    <input type={"email"} className='bg-slate-200 w-3/5 rounded-xl px-3 py-2 focus:outline-none' placeholder='Email' onChange={(e) => SetEmail(e.target.value)}></input>
+                                    <input type={"Password"} className='bg-slate-200 w-3/5 rounded-xl px-3 py-2 focus:outline-none' placeholder='Password' onChange={(e) => SetPassword(e.target.value)}></input>
+                                    <button onClick={SignWithEmail}>SignUp</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
         </div>
         </>
     )
@@ -58,7 +117,7 @@ function Header() {
         <div className='flex px-5 '>
             <Popup trigger={<button> <img src={img} className="h-10 rounded-full"></img> </button>}>
                 <div
-                    className='flex flex-col justify-between bg-slate-100 rounded-lg w-96 absolute right-1 p-4 subpixel-antialiased'>
+                    className='flex flex-col justify-between  bg-slate-100 rounded-lg w-96 absolute right-1 p-4 subpixel-antialiased'>
                     <div
                         id="top-section"
                         className='h-2/3 flex flex-col justify-around p-2 border-b-2 border-slate-200/80 mb-4'>
@@ -88,7 +147,7 @@ function Header() {
     )
 }
 
-function Chatroom() {
+const Chatroom = () => {
 
     const [user] = useAuthState(auth);
     const messageRef = firestore.collection("message");
@@ -119,10 +178,10 @@ function Chatroom() {
         messages && messages.map((message) => console.log(message.id))
     }
     const titleRef = useRef('');
-
+    
     return (
         <div className='bg-[url("./assets/bg.svg")] bg-cover h-full  text-white '>
-            <div className='flex justify-between shadow-lg  w-full opacity-100 sticky top-0'>
+            <div className='flex justify-between shadow-lg  w-full opacity-100 sticky top-0 bg-[url("./assets/bg.svg")]'>
                 <div className='my-4 mx-2'>
                     <img typeof='image' src={SuperChat} className="h-10"></img>
                 </div>
@@ -131,11 +190,11 @@ function Chatroom() {
                 </div>
             </div>
             <div className='flex flex-col items-center'>
-                <div className='md:w-2/5 w-4/5 overflow-scroll h-screen scroll-smooth container-snap'>
+                <div className='md:w-2/5 w-4/5 h-screen   scroll-smooth overflow-scroll container-snap'>
                     <div className="">
                         {messages && messages.map(msg => <Chatmessage key={msg.id} message={msg}/>)}
                     </div>
-                    <div className="w-full mt-5 " ref={titleRef}>
+                    <div className=" w-full mb-14 " ref={titleRef}>
                         <form onSubmit={sendMessage}>
                             <input
                                 value={formValue}
@@ -149,9 +208,14 @@ function Chatroom() {
     )
 }
 function Chatmessage(props) {
+    const [nullphoto,SetNullPhoto] = useState('');
     const [user] = useAuthState(auth);
     const {text, uid, image} = props.message;
-
+    if (!image){
+        SetNullPhoto('https://cdn-icons-png.flaticon.com/512/2318/2318080.png');
+        image = nullphoto;
+    }
+    console.log(image)
     if (uid === user.uid) {
         return (
             <div className='flex my-5 justify-end items-center '>
