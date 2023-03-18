@@ -8,21 +8,19 @@ import {useAuthState} from 'react-firebase-hooks/auth';
 import {useCollectionData} from "react-firebase-hooks/firestore";
 import Popup from 'reactjs-popup';
 import {useRef} from 'react';
-import { IconButton } from '@material-ui/core';
 import Google from './assets/Google.svg';
-import { Password } from '@mui/icons-material';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 document.body.className = "scroll-smooth overflow-clip ";
 
 firebase.initializeApp({
-    apiKey: `${import.meta.env.VITE_API_KEY}`,
-    authDomain: `${import.meta.env.VITE_AUTH_DOMAIN}`,
-    projectId: `${import.meta.env.VITE_PROJECT_ID}`,
-    storageBucket: `${import.meta.env.VITE_STORAGE_BUCKET}`,
-    messagingSenderId: `${import.meta.env.VITE_MESSAGING_SENDER_ID}`,
-    appId: `${import.meta.env.VITE_APP_ID}`,
-    measurementId: `${import.meta.env.VITE_MEASUREMENT_ID}` 
+    apiKey: "AIzaSyAGphO1Py7e8WRhvNGh8--6IZe0jTZpG8w",
+    authDomain: "superchat-15642.firebaseapp.com",
+    projectId: "superchat-15642",
+    storageBucket: "superchat-15642.appspot.com",
+    messagingSenderId: "880959806508",
+    appId: "1:880959806508:web:7ebda4f65f6de4b0144589",
+    measurementId: "G-VY0Y2SJDRY"
 })
 
 const auth = firebase.auth();
@@ -68,7 +66,7 @@ function Signin() {
         <>
         <div className='h-screen flex justify-center items-center '>
             <div className='h-4/5 w-2/3 flex shadow-2xl'>
-                <div className='w-1/2 bg-[url("./assets/SignIn.svg")] font-black'>
+                <div className='w-1/2 bg-cover bg-[url("./assets/SignIn.svg")] font-black'>
                     <div className='flex flex-col justify-center items-center h-full  text-white text-center'>
                         <div className='text-5xl'>
                             Welcome Back
@@ -208,13 +206,9 @@ const Chatroom = () => {
     )
 }
 function Chatmessage(props) {
-    const [nullphoto,SetNullPhoto] = useState('');
     const [user] = useAuthState(auth);
     const {text, uid, image} = props.message;
-    if (!image){
-        SetNullPhoto('https://cdn-icons-png.flaticon.com/512/2318/2318080.png');
-        image = nullphoto;
-    }
+
     console.log(image)
     if (uid === user.uid) {
         return (
