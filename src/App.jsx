@@ -85,26 +85,26 @@ function Signin() {
     const textL = useRef('');
     const Change = () =>{
         if (tf){
-            accDiv.current.className = "md:w-1/2 -z-10 -translate-y-full md:-translate-x-full md:translate-y-0 transition-all ease-in-out duration-700 ";
+            accDiv.current.className = "md:w-1/2  -z-10  -translate-y-full md:-translate-x-full md:translate-y-0 transition-all ease-in-out duration-700 ";
             WelDiv.current.className = "md:w-1/2 h-1/2  md:h-full bg-cover bg-[url('./assets/SignIn.svg')] font-black z-20 translate-y-full md:translate-x-full   md:translate-y-0 transition-all ease-in-out duration-700";
             setTimeout(() => {
                 SetHeading("SignIn")
                 Uname.current.className += " hidden"
             },200);
-            textL.current.className += " transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-2xl duration-700 ";
-            textS.current.className += " transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-2xl duration-700 ";
-            textM.current.className += " transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-2xl duration-700 ";
+            textL.current.className = "text-5xl transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-3xl duration-700 ";
+            textS.current.className = "h-1/5 py-2 flex px-10 text-md transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-3xl duration-700 ";
+            textM.current.className = "text-xl hover:text-blue-300 transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-3xl duration-700 ";
             setTimeout(() => 
             {
-            textL.current.className = "text-5xl transition-all blur-none duration-1000";
-            textS.current.className = " h-1/5 py-2 flex px-10 text-md  transition-all blur-none duration-1000";
-            textM.current.className = "text-xl hover:text-blue-300 transition-all blur-none duration-1000 ";
+            textL.current.className = "text-5xl transition-all blur-none duration-500   ";
+            textS.current.className = " h-1/5 py-2 flex px-10 text-md  transition-all blur-none duration-500    ";
+            textM.current.className = "text-xl hover:text-blue-300 transition-all blur-none duration-500     ";
             setFirst({
                 greet:"Hello, Friend",
                 subHeading:"Enter your personal detailes and get started!",
                 method:"Create Account"
             })
-        },90)
+        },250)
             setTf(false);
         }
         else {
@@ -114,20 +114,20 @@ function Signin() {
                 SetHeading("Create Account")
                 Uname.current.className = "bg-slate-200 w-3/5 rounded-xl px-3 py-2 focus:outline-none"
             },200);
-            textL.current.className += " transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-2xl duration-700 ";
-            textS.current.className += " transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-2xl duration-700 ";
-            textM.current.className += " transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-2xl duration-700 ";
+            textL.current.className = "text-5xl transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-3xl duration-700 ";
+            textS.current.className = "h-1/5 py-2 flex px-10 text-md transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-3xl duration-700 ";
+            textM.current.className = "text-xl hover:text-blue-300 transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-3xl duration-700 ";
             setTimeout(() => 
             {
-                textL.current.className = "text-5xl transition-all blur-none duration-1000";
-                textS.current.className = " h-1/5 py-2 flex px-10 text-md  transition-all blur-none duration-1000";
-                textM.current.className = "text-xl hover:text-blue-300 transition-all blur-none duration-1000 ";
+                textL.current.className = "text-5xl transition-all blur-none duration-500";
+                textS.current.className = " h-1/5 py-2 flex px-10 text-md  transition-all blur-none duration-500";
+                textM.current.className = "text-xl hover:text-blue-300 transition-all blur-none duration-500 ";
                 setFirst({
                     greet:"Welcome Back",
                     subHeading:"Join the conversation and explore new horizons with our chat community.",
                     method:"SignIn"
                 })
-        },90)   
+        },250)   
             setTf(true);
         }
     } 
@@ -135,7 +135,7 @@ function Signin() {
     return (
         <>
         <div className='h-screen flex   justify-center items-center '>
-            <div className='md:h-4/5 h-full md:w-2/3  w-full  md:flex   shadow-2xl'>
+            <div className='md:h-4/5 h-full md:w-2/3  w-full  md:flex    shadow-2xl'>
                 <div ref={WelDiv} className='z-20 md:w-1/2 h-1/2  md:h-full bg-cover bg-[url("./assets/SignIn.svg")] font-black   ' >
                     <div className='flex flex-col justify-center items-center md:h-full h-full  text-white text-center  '>
                         <div className='text-5xl ' ref={textL}>
@@ -151,7 +151,7 @@ function Signin() {
                         </div>
                     </div>
                 </div>
-                <div className='md:w-1/2 -z-10 ' ref={accDiv}>
+                <div className='md:w-1/2 ' ref={accDiv}>
                     <div className='flex flex-col md:py-20 items-center h-full '>
                         <div className=' text-5xl font-black' >
                             {Heading}
