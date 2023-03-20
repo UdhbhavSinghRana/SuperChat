@@ -49,7 +49,7 @@ function Signin() {
         auth.signInWithPopup(provider);
     }
     const SignWithEmail = (e) => {
-        if(!name) return alert("Please enter name")
+        if(!name) return alert("Please enter name");
         e.preventDefault();
         auth.
         createUserWithEmailAndPassword(email,password).
@@ -62,40 +62,111 @@ function Signin() {
         })
         
     }
+    const Sign = (e) =>{
+        if(!name) return alert("Please enter name")
+
+        e.preventDefault();
+        
+        auth.
+        signInWithEmailAndPassword(email,password)
+    }
+    const WelDiv = useRef('');
+    const accDiv = useRef('');
+    const textS = useRef('');
+    const textM = useRef('');
+    const Uname = useRef('');
+    const [Heading,SetHeading] = useState("Create Account");
+    const [tf,setTf] = useState(true);
+    const [first,setFirst] = useState({
+        greet:"Welcome Back",
+        subHeading:"Join the conversation and explore new horizons with our chat community.",
+        method:"SignIn"
+    });
+    const textL = useRef('');
+    const Change = () =>{
+        if (tf){
+            accDiv.current.className = "md:w-1/2 -z-10 -translate-y-full md:-translate-x-full md:translate-y-0 transition-all ease-in-out duration-700 ";
+            WelDiv.current.className = "md:w-1/2 h-1/2  md:h-full bg-cover bg-[url('./assets/SignIn.svg')] font-black z-20 translate-y-full md:translate-x-full   md:translate-y-0 transition-all ease-in-out duration-700";
+            setTimeout(() => {
+                SetHeading("SignIn")
+                Uname.current.className += " hidden"
+            },200);
+            textL.current.className += " transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-2xl duration-700 ";
+            textS.current.className += " transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-2xl duration-700 ";
+            textM.current.className += " transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-2xl duration-700 ";
+            setTimeout(() => 
+            {
+            textL.current.className = "text-5xl transition-all blur-none duration-1000";
+            textS.current.className = " h-1/5 py-2 flex px-10 text-md  transition-all blur-none duration-1000";
+            textM.current.className = "text-xl hover:text-blue-300 transition-all blur-none duration-1000 ";
+            setFirst({
+                greet:"Hello, Friend",
+                subHeading:"Enter your personal detailes and get started!",
+                method:"Create Account"
+            })
+        },90)
+            setTf(false);
+        }
+        else {
+            accDiv.current.className = "md:w-1/2  -z-10 translate-y-1/6 md:translate-x-1/6 md:translate-y-0 transition-all ease-in-out duration-700 ";
+            WelDiv.current.className = "md:w-1/2 h-1/2  md:h-full bg-cover bg-[url('./assets/SignIn.svg')] font-black z-20 translate-y-1/6 md:-translate-x-1/6   md:translate-y-0 transition-all ease-in-out duration-700";
+            setTimeout(() => {
+                SetHeading("Create Account")
+                Uname.current.className = "bg-slate-200 w-3/5 rounded-xl px-3 py-2 focus:outline-none"
+            },200);
+            textL.current.className += " transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-2xl duration-700 ";
+            textS.current.className += " transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-2xl duration-700 ";
+            textM.current.className += " transition-all blur-sm duration-200 blur-md duration-300 blur-lg duration-500 blur-2xl duration-700 ";
+            setTimeout(() => 
+            {
+                textL.current.className = "text-5xl transition-all blur-none duration-1000";
+                textS.current.className = " h-1/5 py-2 flex px-10 text-md  transition-all blur-none duration-1000";
+                textM.current.className = "text-xl hover:text-blue-300 transition-all blur-none duration-1000 ";
+                setFirst({
+                    greet:"Welcome Back",
+                    subHeading:"Join the conversation and explore new horizons with our chat community.",
+                    method:"SignIn"
+                })
+        },90)   
+            setTf(true);
+        }
+    } 
+        
     return (
         <>
-        <div className='h-screen flex justify-center items-center '>
-            <div className='h-4/5 w-2/3 flex shadow-2xl'>
-                <div className='w-1/2 bg-cover bg-[url("./assets/SignIn.svg")] font-black'>
-                    <div className='flex flex-col justify-center items-center h-full  text-white text-center'>
-                        <div className='text-5xl'>
-                            Welcome Back
+        <div className='h-screen flex   justify-center items-center '>
+            <div className='md:h-4/5 h-full md:w-2/3  w-full  md:flex   shadow-2xl'>
+                <div ref={WelDiv} className='z-20 md:w-1/2 h-1/2  md:h-full bg-cover bg-[url("./assets/SignIn.svg")] font-black   ' >
+                    <div className='flex flex-col justify-center items-center md:h-full h-full  text-white text-center  '>
+                        <div className='text-5xl ' ref={textL}>
+                            {first.greet}
                         </div>
-                        <div className='h-1/5 py-2 flex px-10 text-md'>
-                            Join the conversation and explore new horizons with our chat community.
+                        <div className='h-1/5 py-2 flex px-10 text-md ' ref={textS}>
+                            {first.subHeading}
                         </div>
-                        <div className='text-xl hover:text-blue-300'>
-                            <button>
-                                SignIn
+                        <div className='text-xl hover:text-blue-300' ref={textM}>
+                            <button onClick={Change}>
+                                {first.method}
                             </button>
                         </div>
                     </div>
                 </div>
-                <div className='w-1/2  '>
-                    <div className='flex flex-col py-20 items-center h-full'>
-                        <div className=' text-5xl font-black'>
-                            Create Account
+                <div className='md:w-1/2 -z-10 ' ref={accDiv}>
+                    <div className='flex flex-col md:py-20 items-center h-full '>
+                        <div className=' text-5xl font-black' >
+                            {Heading}
                         </div>
                         <div className='py-7 flex flex-col items-center w-full'>
                             <button onClick={Login}>
                                 <img src={Google} className="h-10 w-10"></img>
                             </button>
                             <div className='w-full'>
-                                <form className='py-14 w-full flex flex-col justify-center items-center gap-5' >
-                                    <input className='bg-slate-200 w-3/5 rounded-xl px-3 py-2 focus:outline-none' placeholder='Username' onChange={(e) => SetName(e.target.value)}></input>
+                                <form className='py-14 w-full flex flex-col justify-center items-center gap-5 md:h-full ' >
+                                    <input className='bg-slate-200 w-3/5 rounded-xl px-3 py-2 focus:outline-none' placeholder='Username' onChange={(e) => SetName(e.target.value)} ref={Uname}></input>
                                     <input type={"email"} className='bg-slate-200 w-3/5 rounded-xl px-3 py-2 focus:outline-none' placeholder='Email' onChange={(e) => SetEmail(e.target.value)}></input>
                                     <input type={"Password"} className='bg-slate-200 w-3/5 rounded-xl px-3 py-2 focus:outline-none' placeholder='Password' onChange={(e) => SetPassword(e.target.value)}></input>
-                                    <button onClick={SignWithEmail}>SignUp</button>
+                                    
+                                    {tf ? <button className='font-black ' onClick={SignWithEmail}>SignUp</button> : <button className='font-black' onClick={Sign}>SignIn</button>}
                                 </form>
                             </div>
                         </div>
@@ -110,7 +181,10 @@ function Signin() {
 
 function Header() {
     const [user] = useAuthState(auth);
-    const img = user.photoURL;
+    let img = user.photoURL;
+    if (!img){
+        img = "https://cdn-icons-png.flaticon.com/512/2318/2318080.png";
+    }   
     return (
         <div className='flex px-5 '>
             <Popup trigger={<button> <img src={img} className="h-10 rounded-full"></img> </button>}>
@@ -120,7 +194,7 @@ function Header() {
                         id="top-section"
                         className='h-2/3 flex flex-col justify-around p-2 border-b-2 border-slate-200/80 mb-4'>
                         <div id="user" className="flex">
-                            <img className="rounded-full h-16 w-16 mr-4" src={user.photoURL}/>
+                            <img className="rounded-full h-16 w-16 mr-4" src={img}/>
                             <div id="user-info-div" className="flex items-center">
                                 <div id="user-info">
                                     <div id="user-info-name" className="font-semibold">{user.displayName}</div>
@@ -155,7 +229,8 @@ const Chatroom = () => {
     const sendMessage = (e) => {
         e.preventDefault();
         titleRef.current.scrollIntoView({behavior: "smooth"});
-        if (formValue === '') {
+        const chnge = formValue.trim();
+        if (chnge === '') {
             return;
         }
         const {uid} = auth.currentUser;
@@ -192,7 +267,7 @@ const Chatroom = () => {
                     <div className="">
                         {messages && messages.map(msg => <Chatmessage key={msg.id} message={msg}/>)}
                     </div>
-                    <div className=" w-full mb-14 " ref={titleRef}>
+                    <div className=" w-full mb-14  " ref={titleRef}>
                         <form onSubmit={sendMessage}>
                             <input
                                 value={formValue}
@@ -208,9 +283,23 @@ const Chatroom = () => {
 function Chatmessage(props) {
     const [user] = useAuthState(auth);
     const {text, uid, image} = props.message;
-
-    console.log(image)
-    if (uid === user.uid) {
+    if( !image && uid === user.uid ){
+        return(
+            <div className='flex my-5 justify-end items-center '>
+                <p className='px-3'>{text}</p>
+                <img src="https://cdn-icons-png.flaticon.com/512/2318/2318080.png" className="h-14 rounded-full"></img>
+            </div>
+        )
+    }
+    else if (!image && uid !== user.uid){
+        return(
+            <div className='flex my-5 items-center'>
+                <img src="https://cdn-icons-png.flaticon.com/512/2318/2318080.png" className="h-14 rounded-full"></img>
+                <p className='px-3'>{text}</p>
+            </div>
+        )
+    }
+    else if (uid === user.uid) {
         return (
             <div className='flex my-5 justify-end items-center '>
                 <p className='px-3'>{text}</p>
