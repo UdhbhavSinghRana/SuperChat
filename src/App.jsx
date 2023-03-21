@@ -251,6 +251,69 @@ const Chatroom = () => {
         messages && messages.map((message) => console.log(message.id))
     }
     const titleRef = useRef('');
+
+    const [lobbyUsers, setLobbyUsers] = useState([
+        {
+            id: 1,
+            name: 'Dev',
+            desc: "I'll be vibing shawty ;)",
+            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.BszTAqL4i-Ls1M8wD5xLsgHaFr%26pid%3DApi&f=1&ipt=51f414dc76e316605af80b97d3bda4a2dd0f515763f3d57a082c5bf95967abce&ipo=images'
+        },
+        {
+            id: 2,
+            name: 'Udhbhav',
+            desc: "What the hell!!",
+            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.JtiDIBvREYtipRWpCW27HgHaGx%26pid%3DApi&f=1&ipt=271400cf7e802705784b4cd57e9e0bdded4f12206cdc502745951505202f5be4&ipo=images'
+        },
+        {
+            id: 3,
+            name: 'Aman',
+            desc: "I'm capybara 0.0",
+            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.NkLkUzTV5UVX4OhdUcJymQHaEx%26pid%3DApi&f=1&ipt=e8395a11d58d3608ab398a2619eb3a41a29fbffde369011efb36dd2b7cc19cbc&ipo=images'
+        },
+        {
+            id: 4,
+            name: 'Mohit',
+            desc: "This shit is amazing!",
+            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.09cSFarXVQEhfUdTM9dnAgHaHa%26pid%3DApi&f=1&ipt=bf8d3e1f3efcb8b7c9019ba6121d63cc7e8ddea92b5c1911f13362936e9ef176&ipo=images'
+        },
+        {
+            id: 5,
+            name: 'Ayush',
+            desc: "Pols a gai pols 0.0",
+            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.lmC0Jltzshk-inrid0QsVQAAAA%26pid%3DApi&f=1&ipt=c7b81c4b8a37853963ff818f46510db58b398453fe6fe756c750b403894849e9&ipo=images'
+        },
+        {
+            id: 6,
+            name: 'Abhay',
+            desc: "Kitty kat Pitty pat!",
+            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.LbuIhd9pXdOye-I5MOAiawAAAA%26pid%3DApi&f=1&ipt=1ccf1fa0dd41d2ba828ed0014e06b587848afda34423e7bba5a7bfa60b2b7baa&ipo=images'
+        },
+        {
+            id: 7,
+            name: 'Kamlesh',
+            desc: "Soluchan gang boi!",
+            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse3.mm.bing.net%2Fth%3Fid%3DOIP.gEHyJOz-Suihh_Z6Pf5fxQHaHZ%26pid%3DApi&f=1&ipt=3e0dbbdffdd9133468e5923fa0b563c31063db88ccf6d11ba7f0c2923420843f&ipo=images'
+        },
+        {
+            id: 8,
+            name: 'Virat',
+            desc: "Me on melody ^^",
+            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.xR2-wDKIMYvBbslMEbOF_QHaHa%26pid%3DApi&f=1&ipt=98dc9a58e5403d396b6dbf5ef5a5cc9ea9a37c77ec30afab8c6d27512e8874c9&ipo=images'
+        },
+        {
+            id: 7,
+            name: 'Lakshay',
+            desc: "Dimpression :(",
+            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.xbwOtewhbbXCNe6ob4hrvwHaFo%26pid%3DApi&f=1&ipt=660de4f9a6b573b79814604bb8d719eeba64bff81ff61c5aa28de5aed5df3c1a&ipo=images'
+        },
+        {
+            id: 8,
+            name: 'Jhingur',
+            desc: "Jee Jee Jee",
+            image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.LHCdtcYNgra1-3Khu8vx8gHaHy%26pid%3DApi&f=1&ipt=bcc131e142cad9d35b6be53bb59657e744f43a7fccebe1205d32e3edfc429931&ipo=images'
+        },
+    ])
     
     return (
         <div className='bg-[url("./assets/bg.svg")] bg-cover h-full  text-white '>
@@ -264,7 +327,17 @@ const Chatroom = () => {
                         <Header/>
                     </div>
                 </div>
-                helo
+                <div className='lobby-users w-full flex flex-col scroll-smooth overflow-scroll'>
+                        {lobbyUsers.map(lobbyUser => (
+                            <div className='lobby-user py-4 px-3 rounded-lg flex gap-2 justify-start items-center cursor-pointer hover:bg-cyan-800' key={lobbyUser.id}>
+                                <img src={lobbyUser.image} className='w-12 h-12 rounded-full' />
+                                <div className='user-lobby-info flex flex-col gap-1/2'>
+                                    <p className='user-lobby-name font-semibold'>{lobbyUser.name}</p>
+                                    <p className='use-lobby-desc font-light text-sm'>{lobbyUser.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                </div>
             </div>
             <div className='flex flex-col items-end px-20'>
                 <div className='md:w-3/4 w-4/5 h-screen   scroll-smooth overflow-scroll container-snap'>
