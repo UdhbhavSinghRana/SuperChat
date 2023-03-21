@@ -254,13 +254,17 @@ const Chatroom = () => {
     
     return (
         <div className='bg-[url("./assets/bg.svg")] bg-cover h-full  text-white '>
-            <div className='flex justify-between shadow-lg  w-full opacity-100 sticky top-0 bg-[url("./assets/bg.svg")]'>
-                <div className='my-4 mx-2'>
-                    <img typeof='image' src={SuperChat} className="h-10"></img>
+            
+            <div className='w-1/4 absolute h-screen flex flex-col items-center  bg-[#0b3b55]'>
+                <div className='flex justify-between shadow-xl  w-full opacity-100 sticky top-0 bg-[#092b3d] '>
+                    <div className='my-4 mx-2'>
+                        <img typeof='image' src={SuperChat} className="h-10"></img>
+                    </div>
+                    <div className='flex justify-end px-4 py-4 '>
+                        <Header/>
+                    </div>
                 </div>
-                <div className='flex justify-end px-4 py-4 '>
-                    <Header/>
-                </div>
+                helo
             </div>
             <div className='flex flex-col items-end px-20'>
                 <div className='md:w-3/4 w-4/5 h-screen   scroll-smooth overflow-scroll container-snap'>
@@ -289,14 +293,14 @@ function Chatmessage(props) {
                 <div className='bg-[#1982FC] mx-4 rounded-2xl py-2 '>
                 <p className='px-3'>{text}</p>
                 </div>
-                <img src="https://cdn-icons-png.flaticon.com/512/2318/2318080.png" className="h-14 rounded-full"></img>
+                <img src="https://cdn-icons-png.flaticon.com/512/2318/2318080.png" className="h-10 rounded-full"></img>
             </div>
         )
     }
     else if (!image && uid !== user.uid){
         return(
             <div className='flex my-5 items-center'>
-                <img src="https://cdn-icons-png.flaticon.com/512/2318/2318080.png" className="h-14 rounded-full"></img>
+                <img src="https://cdn-icons-png.flaticon.com/512/2318/2318080.png" className="h-10 rounded-full"></img>
                 <div className='bg-gray-800 mx-4 rounded-2xl py-2 '>
                 <p className='px-3'>{text}</p>
                 </div>
@@ -309,13 +313,13 @@ function Chatmessage(props) {
                 <div  className='bg-[#1982FC] mx-4 rounded-2xl py-2 '>
                 <p className='px-3'>{text}</p>
                 </div>
-                <img src={image} className="h-14 rounded-full"></img>
+                <img src={image} className="h-10 rounded-full"></img>
             </div>
         )
     } else {
         return (
             <div className='flex my-5 items-center'>
-                <img src={image} className="h-14 rounded-full"></img>
+                <img src={image} className="h-10 rounded-full"></img>
                 <div className='bg-gray-800 mx-4 rounded-2xl py-2'> 
                 <p className='px-3'>{text}</p>
                 </div>
