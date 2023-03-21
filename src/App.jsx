@@ -69,6 +69,7 @@ function Signin() {
         
         auth.
         signInWithEmailAndPassword(email,password)
+        .catch(error => alert(error));
     }
     const WelDiv = useRef('');
     const accDiv = useRef('');
@@ -85,7 +86,7 @@ function Signin() {
     const textL = useRef('');
     const Change = () =>{
         if (tf){
-            accDiv.current.className = "md:w-1/2  -z-10  -translate-y-full md:-translate-x-full md:translate-y-0 transition-all ease-in-out duration-700 ";
+            accDiv.current.className = "md:w-1/2  z-10  -translate-y-full md:-translate-x-full md:translate-y-0 transition-all ease-in-out duration-700 ";
             WelDiv.current.className = "md:w-1/2 h-1/2  md:h-full bg-cover bg-[url('./assets/SignIn.svg')] font-black z-20 translate-y-full md:translate-x-full   md:translate-y-0 transition-all ease-in-out duration-700";
             setTimeout(() => {
                 SetHeading("SignIn")
@@ -108,7 +109,7 @@ function Signin() {
             setTf(false);
         }
         else {
-            accDiv.current.className = "md:w-1/2  -z-10 translate-y-1/6 md:translate-x-1/6 md:translate-y-0 transition-all ease-in-out duration-700 ";
+            accDiv.current.className = "md:w-1/2  z-10 translate-y-1/6 md:translate-x-1/6 md:translate-y-0 transition-all ease-in-out duration-700 ";
             WelDiv.current.className = "md:w-1/2 h-1/2  md:h-full bg-cover bg-[url('./assets/SignIn.svg')] font-black z-20 translate-y-1/6 md:-translate-x-1/6   md:translate-y-0 transition-all ease-in-out duration-700";
             setTimeout(() => {
                 SetHeading("Create Account")
@@ -151,7 +152,7 @@ function Signin() {
                         </div>
                     </div>
                 </div>
-                <div className='md:w-1/2 ' ref={accDiv}>
+                <div className='md:w-1/2  z-10' ref={accDiv}>
                     <div className='flex flex-col md:py-20 items-center h-full '>
                         <div className=' text-5xl font-black' >
                             {Heading}
@@ -161,12 +162,11 @@ function Signin() {
                                 <img src={Google} className="h-10 w-10"></img>
                             </button>
                             <div className='w-full'>
-                                <form className='py-14 w-full flex flex-col justify-center items-center gap-5 md:h-full ' >
+                                <form className='py-14 w-full flex flex-col justify-center items-center gap-5 h-full ' >
                                     <input className='bg-slate-200 w-3/5 rounded-xl px-3 py-2 focus:outline-none' placeholder='Username' onChange={(e) => SetName(e.target.value)} ref={Uname}></input>
                                     <input type={"email"} className='bg-slate-200 w-3/5 rounded-xl px-3 py-2 focus:outline-none' placeholder='Email' onChange={(e) => SetEmail(e.target.value)}></input>
                                     <input type={"Password"} className='bg-slate-200 w-3/5 rounded-xl px-3 py-2 focus:outline-none' placeholder='Password' onChange={(e) => SetPassword(e.target.value)}></input>
-                                    
-                                    {tf ? <button className='font-black ' onClick={SignWithEmail}>SignUp</button> : <button className='font-black' onClick={Sign}>SignIn</button>}
+                                    {tf ? <button className='font-black' onClick={SignWithEmail}>SignUp</button > : <button className='font-black'>SignIn</button>}
                                 </form>
                             </div>
                         </div>
@@ -262,8 +262,8 @@ const Chatroom = () => {
                     <Header/>
                 </div>
             </div>
-            <div className='flex flex-col items-center'>
-                <div className='md:w-2/5 w-4/5 h-screen   scroll-smooth overflow-scroll container-snap'>
+            <div className='flex flex-col items-end px-20'>
+                <div className='md:w-3/4 w-4/5 h-screen   scroll-smooth overflow-scroll container-snap'>
                     <div className="">
                         {messages && messages.map(msg => <Chatmessage key={msg.id} message={msg}/>)}
                     </div>
@@ -286,7 +286,9 @@ function Chatmessage(props) {
     if( !image && uid === user.uid ){
         return(
             <div className='flex my-5 justify-end items-center '>
+                <div className='bg-[#1982FC] mx-4 rounded-2xl py-2 '>
                 <p className='px-3'>{text}</p>
+                </div>
                 <img src="https://cdn-icons-png.flaticon.com/512/2318/2318080.png" className="h-14 rounded-full"></img>
             </div>
         )
@@ -295,14 +297,18 @@ function Chatmessage(props) {
         return(
             <div className='flex my-5 items-center'>
                 <img src="https://cdn-icons-png.flaticon.com/512/2318/2318080.png" className="h-14 rounded-full"></img>
+                <div className='bg-gray-800 mx-4 rounded-2xl py-2 '>
                 <p className='px-3'>{text}</p>
+                </div>
             </div>
         )
     }
     else if (uid === user.uid) {
         return (
             <div className='flex my-5 justify-end items-center '>
+                <div  className='bg-[#1982FC] mx-4 rounded-2xl py-2 '>
                 <p className='px-3'>{text}</p>
+                </div>
                 <img src={image} className="h-14 rounded-full"></img>
             </div>
         )
@@ -310,7 +316,9 @@ function Chatmessage(props) {
         return (
             <div className='flex my-5 items-center'>
                 <img src={image} className="h-14 rounded-full"></img>
+                <div className='bg-gray-800 mx-4 rounded-2xl py-2'> 
                 <p className='px-3'>{text}</p>
+                </div>
             </div>
         )
     }
