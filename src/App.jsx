@@ -10,6 +10,8 @@ import Popup from 'reactjs-popup';
 import {useRef} from 'react';
 import Google from './assets/Google.svg';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { IoSend } from "react-icons/io5";
+
 
 document.body.className = "scroll-smooth overflow-clip ";
 
@@ -344,12 +346,14 @@ const Chatroom = () => {
                     <div className="">
                         {messages && messages.map(msg => <Chatmessage key={msg.id} message={msg}/>)}
                     </div>
-                    <div className=" " ref={titleRef}>
+                    <div ref={titleRef}>
                         <form onSubmit={sendMessage} className='w-full flex justify-center items-center   '>
                             <input
                                 value={formValue}
                                 className="w-2/3 py-2 px-5 mt-3 mb-5 bg-[#051e2b] rounded-md focus:outline-none"
-                                onChange={(e) => setFormValue(e.target.value)}></input>
+                                onChange={(e) => setFormValue(e.target.value)}>
+                            </input>
+                            <IoSend className='send-image relative right-10 bottom-1 cursor-pointer m-1 active:text-xl active: right-11' onClick={sendMessage} />
                         </form>
                     </div>
                 </div>
