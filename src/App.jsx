@@ -187,9 +187,8 @@ function Header() {
     }   
     return (
         <div className='flex px-5 '>
-            <Popup trigger={<button> <img src={img} className="h-10 rounded-full"></img> </button>}>
-                <div
-                    className='flex flex-col justify-between  bg-slate-100 rounded-lg w-96 absolute right-1 p-4 subpixel-antialiased'>
+            <Popup trigger={<button> <img src={img} className="h-10 rounded-full w-10"></img> </button>}>
+                <div className='flex flex-col justify-between  bg-slate-100 rounded-lg w-96 absolute     p-4 subpixel-antialiased'>
                     <div
                         id="top-section"
                         className='h-2/3 flex flex-col justify-around p-2 border-b-2 border-slate-200/80 mb-4'>
@@ -309,10 +308,11 @@ const Chatroom = () => {
         },
         {
             id: 8,
-            name: 'Jhingur',
+            name: 'Sumit Verma',
             desc: "Jee Jee Jee",
             image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.LHCdtcYNgra1-3Khu8vx8gHaHy%26pid%3DApi&f=1&ipt=bcc131e142cad9d35b6be53bb59657e744f43a7fccebe1205d32e3edfc429931&ipo=images'
         },
+        
     ])
     
     return (
@@ -327,7 +327,7 @@ const Chatroom = () => {
                         <Header/>
                     </div>
                 </div>
-                <div className='lobby-users w-full flex flex-col scroll-smooth overflow-scroll'>
+                <div className='lobby-users w-full flex flex-col scroll-smooth overflow-scroll container-snap'>
                         {lobbyUsers.map(lobbyUser => (
                             <div className='lobby-user py-4 px-3 rounded-lg flex gap-2 justify-start items-center cursor-pointer hover:bg-cyan-800' key={lobbyUser.id}>
                                 <img src={lobbyUser.image} className='w-12 h-12 rounded-full' />
@@ -344,11 +344,11 @@ const Chatroom = () => {
                     <div className="">
                         {messages && messages.map(msg => <Chatmessage key={msg.id} message={msg}/>)}
                     </div>
-                    <div className=" w-full mb-14  " ref={titleRef}>
-                        <form onSubmit={sendMessage}>
+                    <div className=" " ref={titleRef}>
+                        <form onSubmit={sendMessage} className='w-full flex justify-center items-center   '>
                             <input
                                 value={formValue}
-                                className="w-full py-2 px-5 mt-3 mb-5 bg-[#051e2b] rounded-md focus:outline-none"
+                                className="w-2/3 py-2 px-5 mt-3 mb-5 bg-[#051e2b] rounded-md focus:outline-none"
                                 onChange={(e) => setFormValue(e.target.value)}></input>
                         </form>
                     </div>
