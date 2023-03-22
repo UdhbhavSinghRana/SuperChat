@@ -337,16 +337,21 @@ const Chatroom = () => {
                     </button>
                     Profile
                 </div>
-                <div className='flex flex-col py-10 justify-center items-center'>
-                    <img src={img} className='rounded-full h-24  '></img>
-                    <div className=' absolute hover:bg-[#424749] hover:bg-opacity-60 hover:text-white hover:text hover:text-opacity-100 opacity-0 hover:opacity-100 flex justify-center items-center rounded-full    h-24 w-24'>
-                        <img src='https://cdn-icons-png.flaticon.com/512/685/685655.png' className='h-7'></img>
+                <div className='flex flex-col py-10 justify-center items-center' >
+                    <div>
+                        <div className=' absolute hover:bg-[#424749] hover:bg-opacity-60 hover:text-white hover:text hover:text-opacity-100 opacity-0 hover:opacity-100 flex justify-center items-center rounded-full    h-24 w-24'>
+                            <img src='https://cdn-icons-png.flaticon.com/512/685/685655.png' className='h-7'></img>
+                        </div>
+                        <img src={img} className='rounded-full h-24  '></img>
                     </div>
-                    <div className='py-5 text-3xl'>
+                    <div className='pt-5 '>
                         @{user.displayName}
                     </div>
-                    <div className=' text-xl'>
+                    <div className='text-slate-400 '>
                         {user.email}
+                    </div>
+                    <div className='my-7 p-2 bg-slate-500 rounded-lg hover:bg-slate-600'>
+                        <button onClick={() => {auth.signOut()}}>SignOut</button>
                     </div>
                 </div>
             </div>
@@ -362,7 +367,7 @@ const Chatroom = () => {
                                 className="w-2/3 py-2 px-5 mt-3 mb-5 bg-[#051e2b] rounded-md focus:outline-none"
                                 onChange={(e) => setFormValue(e.target.value)}>
                             </input>
-                            <IoSend className='send-image relative right-10 bottom-1 cursor-pointer m-1 active:text-xl active: right-11' onClick={sendMessage} />
+                            <IoSend className='send-image relative right-10 bottom-1 cursor-pointer m-1 active:text-xl active:right-11' onClick={sendMessage} />
                         </form>
                     </div>
                 </div>
