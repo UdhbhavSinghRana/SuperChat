@@ -179,46 +179,26 @@ function Signin() {
     )
 }
 
-function Header() {
-    const [user] = useAuthState(auth);
-    let img = user.photoURL;
-    if (!img){
-        img = "https://cdn-icons-png.flaticon.com/512/2318/2318080.png";
-    }   
-    return (
-        <div className='flex px-5 '>
-            <Popup trigger={<button> <img src={img} className="h-10 rounded-full w-10"></img> </button>}>
-                <div className='flex flex-col justify-between  bg-slate-100 rounded-lg w-96 absolute     p-4 subpixel-antialiased'>
-                    <div
-                        id="top-section"
-                        className='h-2/3 flex flex-col justify-around p-2 border-b-2 border-slate-200/80 mb-4'>
-                        <div id="user" className="flex">
-                            <img className="rounded-full h-16 w-16 mr-4" src={img}/>
-                            <div id="user-info-div" className="flex items-center">
-                                <div id="user-info">
-                                    <div id="user-info-name" className="font-semibold">{user.displayName}</div>
-                                    <div id="user-info-email" className="font-light text-sm">{user.email}</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div
-                            id="manage-account"
-                            className="flex justify-center items-center py-2 border-2 border-gray-300 rounded-full mt-4 mb-2 hover:bg-gray-300 hover:cursor-pointer">
-                            Manage account
-                        </div>
-                    </div>
-                    <div id="bottom-section" className='h-1/3 flex items-center'>
-                        <button
-                            className="border-2 border-gray-300 p-2 rounded-lg hover:bg-gray-300 "
-                            onClick={() => auth.signOut()}>SignOut</button>
-                    </div>
-                </div>
-            </Popup>
-        </div>
-    )
-}
+
 
 const Chatroom = () => {
+    const aboutRef = useRef('');
+    function Header() {
+        const [user] = useAuthState(auth);
+        let img = user.photoURL;
+        if (!img){
+            img = "https://cdn-icons-png.flaticon.com/512/2318/2318080.png";
+        }   
+        const PopAbout =() =>{
+        aboutRef.current.className = "absolute w-1/4  h-screen translate-x-0 transition-all ease-in duration-200 bg-[#0b3b55]";
+        }
+        
+        return (
+            <div className='flex px-5 '>
+                <button onClick={PopAbout}> <img src={img} className="h-10 rounded-full w-10 " ></img> </button>
+            </div>
+        )
+    }
 
     const [user] = useAuthState(auth);
     const messageRef = firestore.collection("message");
@@ -314,7 +294,14 @@ const Chatroom = () => {
         },
         
     ])
-    
+    const Back =() =>{
+        aboutRef.current.className = "absolute w-1/4  h-screen -translate-x-full transition-all ease-in duration-200 bg-[#0b3b55]";
+    }
+    let img = user.photoURL;
+    if (!img){
+        img = "https://cdn-icons-png.flaticon.com/512/2318/2318080.png";
+    } 
+    console.log(img);  
     return (
         <div className='bg-[url("./assets/bg.svg")] bg-cover h-full  text-white '>
             
@@ -337,6 +324,28 @@ const Chatroom = () => {
                                 </div>
                             </div>
                         ))}
+                </div>
+            </div>
+            <div className='absolute w-1/4 h-screen bg-[#0b3b55]' ref={aboutRef}>
+                <div className='flex gap-5 items-center py-5 bg-[#092b3d] px-3'>
+                   <button onClick={Back} className=''>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="#ffffff" d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                        </svg>
+                    </button>
+                    Profile
+                </div>
+                <div className='flex flex-col py-10 justify-center items-center'>
+                    <img src={img} className='rounded-full h-24  '></img>
+                    <div className=' absolute hover:bg-[#424749] hover:bg-opacity-60 hover:text-white hover:text hover:text-opacity-100 opacity-0 hover:opacity-100 flex justify-center items-center rounded-full    h-24 w-24'>
+                        <img src='https://cdn-icons-png.flaticon.com/512/685/685655.png' className='h-7'></img>
+                    </div>
+                    <div className='py-5 text-3xl'>
+                        @{user.displayName}
+                    </div>
+                    <div className=' text-xl'>
+                        {user.email}
+                    </div>
                 </div>
             </div>
             <div className='flex flex-col items-end px-20'>
