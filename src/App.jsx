@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import SuperChat from './assets/SuperChat.png';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
@@ -11,6 +11,7 @@ import {useRef} from 'react';
 import Google from './assets/Google.svg';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { IoSend } from "react-icons/io5";
+import { FaSearch } from "react-icons/fa";
 
 
 document.body.className = "scroll-smooth overflow-clip ";
@@ -283,13 +284,13 @@ const Chatroom = () => {
             image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.xR2-wDKIMYvBbslMEbOF_QHaHa%26pid%3DApi&f=1&ipt=98dc9a58e5403d396b6dbf5ef5a5cc9ea9a37c77ec30afab8c6d27512e8874c9&ipo=images'
         },
         {
-            id: 7,
+            id: 9,
             name: 'Lakshay',
             desc: "Dimpression :(",
             image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.xbwOtewhbbXCNe6ob4hrvwHaFo%26pid%3DApi&f=1&ipt=660de4f9a6b573b79814604bb8d719eeba64bff81ff61c5aa28de5aed5df3c1a&ipo=images'
         },
         {
-            id: 8,
+            id: 10,
             name: 'Sumit Verma',
             desc: "Jee Jee Jee",
             image: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse4.mm.bing.net%2Fth%3Fid%3DOIP.LHCdtcYNgra1-3Khu8vx8gHaHy%26pid%3DApi&f=1&ipt=bcc131e142cad9d35b6be53bb59657e744f43a7fccebe1205d32e3edfc429931&ipo=images'
@@ -303,10 +304,19 @@ const Chatroom = () => {
     if (!img){
         img = "https://cdn-icons-png.flaticon.com/512/2318/2318080.png";
     } 
-    console.log(img);  
+    const [searchQuery, setSearchQuery] = useState('')
+    const filteredUser = useMemo(() => {
+        return lobbyUsers.filter(user => {
+            return user.name.toLowerCase().includes(searchQuery.toLowerCase())
+        })
+    }, [lobbyUsers, searchQuery])
+
+    // Debugging search query
+    useEffect(() => {
+        console.log(searchQuery)
+    }, [searchQuery])
     return (
         <div className='bg-[url("./assets/bg.svg")] bg-cover h-full  text-white '>
-            
             <div className='w-1/4 absolute h-screen flex flex-col items-center  bg-[#0b3b55]'>
                 <div className='flex justify-between shadow-xl  w-full opacity-100 sticky top-0 bg-[#092b3d] '>
                     <div className='my-4 mx-2'>
@@ -316,8 +326,19 @@ const Chatroom = () => {
                         <Header/>
                     </div>
                 </div>
+        
+                <div className='search-bar w-full p-2 relative'>
+                    <input
+                        className='py-1 px-3 w-full h-12 rounded-xl outline-none bg-cyan-800'
+                        type='search'
+                        placeholder='Search Username' 
+                        value={searchQuery}
+                        onChange={e => setSearchQuery(e.target.value)}
+                    />
+                </div>
+
                 <div className='lobby-users w-full flex flex-col scroll-smooth overflow-scroll container-snap'>
-                        {lobbyUsers.map(lobbyUser => (
+                        {filteredUser.map(lobbyUser => (
                             <div className='lobby-user py-4 px-3 rounded-lg flex gap-2 justify-start items-center cursor-pointer hover:bg-cyan-800' key={lobbyUser.id}>
                                 <img src={lobbyUser.image} className='w-12 h-12 rounded-full' />
                                 <div className='user-lobby-info flex flex-col gap-1/2'>
