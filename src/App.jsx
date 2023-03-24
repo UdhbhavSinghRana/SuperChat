@@ -398,7 +398,7 @@ const Chatroom = () => {
                     <div></div>
                 </div>
                 <div className='w-4/5 '>
-                    <div  className='fixed h-16 flex justify-center items-center bg-[#092b3d]  bottom-0 w-3/4 mx-7 '>
+                    <div  className='fixed h-16 flex justify-center items-center bg-[#092b3d]  bottom-0 w-3/4  right-0 '>
                         <form onSubmit={sendMessage} className='w-full flex justify-center items-center   '>
                             <input
                                 value={formValue}
@@ -420,6 +420,37 @@ function Chatmessage(props) {
     const {Name,text, uid, image} = props.message;
     const arrowStyle = { display: 'none' };
     
+    const [isOpen, setIsOpen] = useState(false);
+    const triggerRef = useRef(null);
+    
+    const handleOpen = () => {
+        setIsOpen(true);
+    };
+    
+    const handleClose = () => {
+        setIsOpen(false);
+    };
+    const css = useRef('');
+    const handleAfterOpen = () => {
+        // Get the position of the trigger element
+        const triggerRect = triggerRef.current.getBoundingClientRect();
+    
+        // Get the height of the popup
+        console.log(triggerRect);
+        // Calculate the position and offset based on the trigger element's position
+        let position, offsetX, offsetY;
+        if(triggerRect.bottom > 400){
+            css.current.className ="-translate-x-1/3 translate-y-1/3 rounded-xl h-96 w-80 bg-slate-800 text-white flex  flex-col";
+        }
+        else if(triggerRect.bottom < 200){
+            css.current.className ="-translate-x-1/3 -translate-y-1/3 rounded-xl h-96 w-80 bg-slate-800 text-white flex  flex-col";
+        }
+    
+    };
+    
+
+    const popupRef = useRef(null);
+
     if( !image && uid === user.uid ){
         return(
             <div className='flex my-5 justify-end items-center '>
@@ -452,27 +483,37 @@ function Chatmessage(props) {
     } else {
         return (
             <div className='flex my-5 items-center'>
-                <div className='relative'>
-                <Popup trigger={<button ><img src={image} className="h-10 relative rounded-full"></img></button>} {...{arrowStyle}}>
-                <div className=' absolute   bottom-1/2  mx-8  -my-72 rounded-xl  h-96 w-80 bg-slate-800 text-white flex  flex-col  '> 
-                    <div className='bg-cyan-700 rounded-t-lg h-1/4 w-full'>
+              <div>
+                <button onClick={handleOpen} ref={triggerRef}>
+                  <img src={image} className="h-10 relative rounded-full"></img>
+                </button>
+              </div>
+              <Popup
+                open={isOpen}
+                onClose={handleClose}
+                onOpen={handleAfterOpen}
+                ref={popupRef}
+              >
+                <div className='-translate-x-1/3 rounded-xl h-96 w-80 bg-slate-800 text-white flex  flex-col ' ref={css}> 
+                  <div className='bg-cyan-700 rounded-t-lg h-1/4 w-full'></div>
+                  <div className='flex gap-20 items-center'>
+                    <div className='-mt-12 px-3'><img src={image} className='rounded-full'></img></div>
+                    <div className='bg-green-500 p-2 mt-2 rounded-lg hover:bg-green-700'>
+                        <button>Add Friend</button>
+                        
                     </div>
-                    <div className='-mt-12 px-3'>
-                        <img src={image} className='rounded-full'></img>
-                    </div>
-                    <div className='h-4/5 bg-slate-900 my-2 p-2 m-2 rounded-lg text-lg'>
-                        <div >
-                            {Name}
-                        </div>
-                    </div>
+                  </div>
+                  <div className='h-4/5 bg-slate-900 my-2 p-2 m-2 rounded-lg text-lg'>
+                    <div>{Name}</div>
+                  </div>
                 </div>
-                </Popup>
-                </div>
-                <div className='bg-gray-800 mx-4 rounded-2xl py-2'> 
+              </Popup>
+              <div className='bg-gray-800 mx-4 rounded-2xl py-2'>
                 <p className='px-3'>{text}</p>
-                </div>
+              </div>
             </div>
-        )
-    }
+          );
+        }
+    
 }
 export default App;
