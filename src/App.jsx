@@ -321,12 +321,6 @@ const Chatroom = () => {
             return user.name.toLowerCase().includes(searchQuery.toLowerCase())
         })
     }, [lobbyUsers, searchQuery])
-
-    // Debugging search query
-    useEffect(() => {
-        console.log(searchQuery)
-    }, [searchQuery])
-
    
     return (
         <div className='bg-[url("./assets/bg.svg")] bg-cover h-full  text-white '>
