@@ -398,11 +398,11 @@ const Chatroom = () => {
                     <div></div>
                 </div>
                 <div className='w-4/5 '>
-                    <div  className='fixed h-16 flex justify-center items-center bg-cyan-800 bottom-0 w-3/4 mx-7 '>
+                    <div  className='fixed h-16 flex justify-center items-center bg-[#092b3d]  bottom-0 w-3/4 mx-7 '>
                         <form onSubmit={sendMessage} className='w-full flex justify-center items-center   '>
                             <input
                                 value={formValue}
-                                className="  w-2/3 py-2 px-5  bg-cyan-600 rounded-md focus:outline-none"
+                                className="  w-2/3 py-2 px-5  bg-[#0b3b55] rounded-md focus:outline-none"
                                 onChange={(e) => setFormValue(e.target.value)}>
                             </input>
                             <IoSend className='send-image relative right-10 bottom-1 cursor-pointer m-1 active:text-xl active:right-11' onClick={sendMessage} />
