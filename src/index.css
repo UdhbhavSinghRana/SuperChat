@@ -3,7 +3,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
+* {
+    box-sizing: border-box;
+  }
 .container-snap::-webkit-scrollbar {
     display: none;
 }

@@ -12,6 +12,7 @@ import Google from './assets/Google.svg';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { IoSend } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
+import { collection, getDocs } from 'firebase/firestore';
 
 
 document.body.className = "scroll-smooth overflow-clip ";
@@ -227,7 +228,7 @@ const Chatroom = () => {
                 .FieldValue
                 .serverTimestamp(),
             uid,
-            image: user.photoURL
+            image: user.photoURL,
         });
         setFormValue('');
     }
@@ -326,8 +327,46 @@ const Chatroom = () => {
     useEffect(() => {
         console.log(searchQuery)
     }, [searchQuery])
+    const inputRef = useRef(null);
+    const edit = () => {
+        inputRef.current.focus();
+    }
+    let x = user.displayName;
+    console.log(user);
+    console.log(x);
+    const labelRef= useRef(null);
+    const [usrname, setUsrname] = useState({ displayName: user.displayName });
+    const ChangeName = (e) => {
+        e.preventDefault();
+        console.log(usrname);
+        auth.currentUser.updateProfile({
+        displayName: usrname
+        });
 
-   
+        const db = firebase.firestore();
+        const messagesRef = db.collection("message");
+
+        // Find all messages for the current user
+        messagesRef.where("uid", "==", auth.currentUser.uid).get().then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            const messageData = doc.data();
+            const messageRef = doc.ref;
+            
+            // Update the message's "Name" field to the current user's display name
+            messageData.Name = usrname;
+            messageRef.update(messageData);
+        });
+        });
+    }
+    const NameChng = (e) =>{
+        if(e.target.value == ''){
+            labelRef.current.className = 'z-10 absolute font-mono transform ease-in-out  translate-y-2 duration-200 translate-x-3 duration-200 text-slate-100 text-md ';
+        }
+        else{
+            labelRef.current.className = 'z-10 bg-[#0b3b55]  font-mono  font-bold  text-md  text-slate-300 transform ease-in-out  absolute px-1  -translate-y-3 duration-200 translate-x-3 duration-200 w-auto text-sm';
+        }
+        setUsrname(e.target.value);
+    }
     return (
         <div className='bg-[url("./assets/bg.svg")] bg-cover h-full  text-white '>
             <div className='w-1/4 absolute h-screen flex flex-col items-center  bg-[#0b3b55]'>
@@ -342,7 +381,7 @@ const Chatroom = () => {
         
                 <div className='search-bar w-full p-2 relative'>
                     <input
-                        className='py-1 px-3 w-full h-12 rounded-xl outline-none bg-cyan-800'
+                        className='py-1 px-3 w-full h-12 rounded-xl  outline-none bg-cyan-800'
                         type='search'
                         placeholder='Search Username' 
                         value={searchQuery}
@@ -371,17 +410,23 @@ const Chatroom = () => {
                     </button>
                     Profile
                 </div>
-                <div className='flex flex-col py-10 justify-center items-center' >
-                    <div>
+                <div className='flex flex-col w-full py-10 ' >
+                    <div className='flex justify-center items-center'>
                         <div className=' absolute hover:bg-[#424749] hover:bg-opacity-60 hover:text-white hover:text hover:text-opacity-100 opacity-0 hover:opacity-100 flex justify-center items-center rounded-full    h-24 w-24'>
                             <img src='https://cdn-icons-png.flaticon.com/512/685/685655.png' className='h-7'></img>
                         </div>
                         <img src={img} className='rounded-full h-24  '></img>
                     </div>
-                    <div className='pt-5 '>
-                        @{user.displayName}
+                    <div className='flex pt-7 w-full'>
+                        <form onSubmit={ChangeName} className='flex justify-center items-center w-full'>
+                            <div className='relative z-0  px-2 w-full group'>
+                            <label ref={labelRef} for="first_name" class="z-10 bg-[#0b3b55]  font-mono  font-bold  text-md  text-slate-300 transform ease-in-out  absolute px-1  -translate-y-3 duration-200 translate-x-3 duration-200 w-auto text-sm"> Name </label>
+                                <input value={usrname.displayName}  className='rounded-lg border-slate-800 border-2 bg-transparent relative w-11/12 p-2  object   focus:outline-none' ref={inputRef} onChange={NameChng}></input>
+                            </div>
+                        </form>
                     </div>
                     <div className='text-slate-400 '>
+                   
                         {user.email}
                     </div>
                     <div className='my-7 p-2 bg-slate-500 rounded-lg hover:bg-slate-600'>
@@ -438,7 +483,6 @@ function Chatmessage(props) {
         // Get the height of the popup
         console.log(triggerRect);
         // Calculate the position and offset based on the trigger element's position
-        let position, offsetX, offsetY;
         if(triggerRect.bottom > 400){
             css.current.className ="-translate-x-1/3 translate-y-1/3 rounded-xl h-96 w-80 bg-slate-800 text-white flex  flex-col";
         }
@@ -498,13 +542,16 @@ function Chatmessage(props) {
                   <div className='bg-cyan-700 rounded-t-lg h-1/4 w-full'></div>
                   <div className='flex gap-20 items-center'>
                     <div className='-mt-12 px-3'><img src={image} className='rounded-full'></img></div>
-                    <div className='bg-green-500 p-2 mt-2 rounded-lg hover:bg-green-700'>
+                    <div className='bg-green-700 p-2 mt-2 rounded-lg hover:bg-green-900'>
                         <button>Add Friend</button>
                         
                     </div>
                   </div>
-                  <div className='h-4/5 bg-slate-900 my-2 p-2 m-2 rounded-lg text-lg'>
-                    <div>{Name}</div>
+                  <div className='h-4/5 bg-slate-900 my-2 p-2 m-2 rounded-lg '>
+                    <div className='pb-3 text-lg font-bold'>{Name}</div>
+                    <hr></hr>
+                    <div className='pt-3 font-bold'>About Me</div>
+                    <div className='pt-1' >I'll be vibing shawty ;)</div>
                   </div>
                 </div>
               </Popup>
