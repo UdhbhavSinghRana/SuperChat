@@ -400,12 +400,19 @@ const Chatroom = () => {
                 <div className='w-4/5 '>
                     <div  className='fixed h-16 flex justify-center items-center bg-[#092b3d]  bottom-0 w-3/4  right-0 '>
                         <form onSubmit={sendMessage} className='w-full flex justify-center items-center   '>
-                            <input
-                                value={formValue}
-                                className="  w-2/3 py-2 px-5  bg-[#0b3b55] rounded-md focus:outline-none"
-                                onChange={(e) => setFormValue(e.target.value)}>
-                            </input>
-                            <IoSend className='send-image relative right-10 bottom-1 cursor-pointer m-1 active:text-xl active:right-11' onClick={sendMessage} />
+                            <div className='input-wrapper w-2/3 relative'>
+                                <input
+                                    value={formValue}
+                                    className="w-full py-2 px-5  bg-[#0b3b55] rounded-md focus:outline-none"
+                                    onChange={(e) => setFormValue(e.target.value)}>
+                                </input>
+                                {
+                                // -- TODO: Expand button when clicked --
+                                // Using 'text-lg' helps, but the right is \
+                                // fixed to 0px and active button widens from left.
+                                }
+                                <IoSend className='send-image absolute right-5 top-1/2 tranform -translate-y-1/2 cursor-pointer' onClick={sendMessage} />
+                            </div>
                         </form>
                     </div>
                 </div>
