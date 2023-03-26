@@ -386,7 +386,7 @@ const Chatroom = () => {
     console.log(user);
     console.log(x);
     const labelRef= useRef(null);
-    const [usrname, setUsrname] = useState({ displayName: user.displayName });
+    const [usrname, setUsrname] = useState(auth.currentUser.displayName);
     const ChangeName = (e) => {
         e.preventDefault();
     console.log(usrname);
@@ -530,7 +530,7 @@ const Chatroom = () => {
                         <form onSubmit={ChangeName} className='flex justify-center items-center w-full'>
                             <div className='relative z-0  px-2 w-full group'>
                             <label ref={labelRef} for="first_name" class="z-10 bg-[#0b3b55]  font-mono  font-bold  text-md  text-slate-300 transform ease-in-out  absolute px-1  -translate-y-3  translate-x-3 duration-200 w-auto text-sm"> Name </label>
-                                <input value={usrname.displayName}  className='rounded-lg border-slate-800 border-2 bg-transparent relative w-11/12 p-2  object   focus:outline-none' ref={inputRef} onChange={NameChng}></input>
+                                <input value={usrname}  className='rounded-lg border-slate-800 border-2 bg-transparent relative w-11/12 p-2  object   focus:outline-none' ref={inputRef} onChange={NameChng}></input>
                             </div>
                         </form>
                     </div>
