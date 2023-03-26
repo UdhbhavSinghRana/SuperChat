@@ -47,11 +47,26 @@ function Signin() {
     const [name,SetName] = useState('');
     const [email,SetEmail] = useState('');
     const [password,SetPassword] = useState('');
+    const userRef = firestore.collection("usersDetails");
     const Login = () => {
-        const provider = new firebase
-            .auth
-            .GoogleAuthProvider();
-        auth.signInWithPopup(provider);
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider)
+        .then(() => {
+            const uid = auth.currentUser.uid;
+            const name = auth.currentUser.displayName;
+            const userQuery = userRef.where('uid', '==', uid);
+            userQuery.get().then((querySnapshot) => {
+            if (querySnapshot.empty) {
+                userRef.add({
+                uid: uid,
+                Name: name,
+                photoURL:auth.currentUser.photoURL,
+                About:'',
+                Friends:{},
+                });
+            }
+            });
+        });
     }
     const SignWithEmail = (e) => {
         if(!name) return alert("Please enter name");
@@ -59,12 +74,27 @@ function Signin() {
         auth.
         createUserWithEmailAndPassword(email,password).
         then((userAuth) => {
-            console.log(userAuth);
             userAuth.user.
             updateProfile({
                 displayName:name,
             })
         })
+        .then(() => {
+            console.log('userRef:', userRef)
+            const uid = auth.currentUser.uid;
+            const name2 = auth.currentUser.displayName;
+            const userQuery = userRef.where('uid', '==', uid);
+            userQuery.get().then((querySnapshot) => {
+            if (querySnapshot.empty) {
+                userRef.add({
+                uid: auth.currentUser.uid,
+                Name: auth.currentUser.displayName,
+                photoURL:auth.currentUser.photoURL,
+                About:'',
+                });
+            }
+            });
+        });
         
     }
     const Sign = (e) =>{
@@ -74,7 +104,24 @@ function Signin() {
         
         auth.
         signInWithEmailAndPassword(email,password)
-        .catch(error => alert(error));
+        .then(() => {
+            console.log('userRef:', userRef)
+            const uid = auth.currentUser.uid;
+            const name2 = auth.currentUser.displayName;
+            const userQuery = userRef.where('uid', '==', uid);
+            userQuery.get().then((querySnapshot) => {
+            if (querySnapshot.empty) {
+                userRef.add({
+                uid: auth.currentUser.uid,
+                Name: auth.currentUser.displayName,
+                photoURL:auth.currentUser.photoURL,
+                About:'',
+                });
+            }
+            });
+        });
+        
+        
     }
     const WelDiv = useRef('');
     const accDiv = useRef('');
@@ -206,6 +253,11 @@ const Chatroom = () => {
     }
 
     const [user] = useAuthState(auth);
+
+    
+    // Fetch the user record again to get the updated data
+  
+
     const messageRef = firestore.collection("message");
     const query = messageRef.orderBy('createdAt');
     const [formValue,
@@ -229,12 +281,14 @@ const Chatroom = () => {
                 .serverTimestamp(),
             uid,
             image: user.photoURL,
+            About:''
         });
+        
         setFormValue('');
     }
     const [messages] = useCollectionData(query, {idField: 'id'});
     {
-        messages && messages.map((message) => console.log(message.id))
+        messages && messages.map((message) => console.log(message.Name))
     }
     const titleRef = useRef('');
     const scroll = () => {
@@ -323,10 +377,7 @@ const Chatroom = () => {
         })
     }, [lobbyUsers, searchQuery])
 
-    // Debugging search query
-    useEffect(() => {
-        console.log(searchQuery)
-    }, [searchQuery])
+  
     const inputRef = useRef(null);
     const edit = () => {
         inputRef.current.focus();
@@ -338,24 +389,38 @@ const Chatroom = () => {
     const [usrname, setUsrname] = useState({ displayName: user.displayName });
     const ChangeName = (e) => {
         e.preventDefault();
-        console.log(usrname);
-        auth.currentUser.updateProfile({
-        displayName: usrname
-        });
+    console.log(usrname);
+    auth.currentUser.updateProfile({
+    displayName: usrname
+    })
+    .then(() => {
+    const db = firebase.firestore();
+    const messagesRef = db.collection("message");
+    const userRef = db.collection("usersDetails");
 
-        const db = firebase.firestore();
-        const messagesRef = db.collection("message");
-
-        // Find all messages for the current user
-        messagesRef.where("uid", "==", auth.currentUser.uid).get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
+    // Find all messages for the current user
+    messagesRef.where("uid", "==", auth.currentUser.uid).get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
             const messageData = doc.data();
             const messageRef = doc.ref;
-            
+
             // Update the message's "Name" field to the current user's display name
             messageData.Name = usrname;
             messageRef.update(messageData);
+            });
         });
+
+    // Update the user's display name in the "usersdetails" collection
+    userRef.where("uid", "==", auth.currentUser.uid).get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+            const userData = doc.data();
+            const userRef = doc.ref;
+
+            // Update the user's "Name" field to the current user's display name
+            userData.Name = usrname;
+            userRef.update(userData);
+                });
+            });
         });
     }
     const NameChng = (e) =>{
@@ -366,6 +431,50 @@ const Chatroom = () => {
             labelRef.current.className = 'z-10 bg-[#0b3b55]  font-mono  font-bold  text-md  text-slate-300 transform ease-in-out  absolute px-1  -translate-y-3 duration-200 translate-x-3 duration-200 w-auto text-sm';
         }
         setUsrname(e.target.value);
+    }
+    const AboutRef = useRef('');
+    const userRef = firestore.collection("usersDetails");
+
+    const [aboutval, setAboutval] = useState('');
+
+    useEffect(() => {
+    const currentUser = firebase.auth().currentUser;
+    if (currentUser) {
+        // Fetch the user details document for the current user
+        userRef.where("uid", "==", currentUser.uid).get().then((querySnapshot) => {
+        if (!querySnapshot.empty) {
+            const userDetails = querySnapshot.docs[0].data();
+            setAboutval(userDetails.About);
+        }
+        });
+    }
+    }, []);
+    console.log(aboutval);    
+    const abouttempChng = (e) =>{
+        if(e.target.value == ''){
+            AboutRef.current.className = 'z-10 absolute font-mono transform ease-in-out  translate-y-2 duration-200 translate-x-3 duration-200 text-slate-100 text-md ';
+        }
+        else{
+            AboutRef.current.className = 'z-10 bg-[#0b3b55]  font-mono  font-bold  text-md  text-slate-300 transform ease-in-out  absolute px-1  -translate-y-3 duration-200 translate-x-3 duration-200 w-auto text-sm';
+        }
+        setAboutval(e.target.value);
+    }
+    const AboutChng = (e) =>{
+        e.preventDefault();
+        const db = firebase.firestore();
+        const userRef = db.collection("usersDetails");
+
+        // Find all messages for the current user
+        userRef.where("uid", "==", auth.currentUser.uid).get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+            const userData = doc.data();
+            const userRef = doc.ref;
+
+            // Update the user's "Name" field to the current user's display name
+            userData.About = aboutval;
+            userRef.update(userData);
+                });
+            });
     }
     return (
         <div className='bg-[url("./assets/bg.svg")] bg-cover h-full  text-white '>
@@ -420,8 +529,16 @@ const Chatroom = () => {
                     <div className='flex pt-7 w-full'>
                         <form onSubmit={ChangeName} className='flex justify-center items-center w-full'>
                             <div className='relative z-0  px-2 w-full group'>
-                            <label ref={labelRef} for="first_name" class="z-10 bg-[#0b3b55]  font-mono  font-bold  text-md  text-slate-300 transform ease-in-out  absolute px-1  -translate-y-3 duration-200 translate-x-3 duration-200 w-auto text-sm"> Name </label>
+                            <label ref={labelRef} for="first_name" class="z-10 bg-[#0b3b55]  font-mono  font-bold  text-md  text-slate-300 transform ease-in-out  absolute px-1  -translate-y-3  translate-x-3 duration-200 w-auto text-sm"> Name </label>
                                 <input value={usrname.displayName}  className='rounded-lg border-slate-800 border-2 bg-transparent relative w-11/12 p-2  object   focus:outline-none' ref={inputRef} onChange={NameChng}></input>
+                            </div>
+                        </form>
+                    </div>
+                    <div className='flex pt-7 w-full'>
+                        <form onSubmit={AboutChng} className='flex justify-center items-center w-full'>
+                            <div className='relative z-0  px-2 w-full group'>
+                            <label  ref={AboutRef} class="z-10 bg-[#0b3b55]  font-mono  font-bold  text-md  text-slate-300 transform ease-in-out  absolute px-1  -translate-y-3  translate-x-3 duration-200 w-auto text-sm"> Bio </label>
+                                <input value={aboutval}  className='rounded-lg border-slate-800 border-2 bg-transparent relative w-11/12 p-2  object   focus:outline-none' ref={inputRef} onChange={abouttempChng}></input>
                             </div>
                         </form>
                     </div>
@@ -445,12 +562,19 @@ const Chatroom = () => {
                 <div className='w-4/5 '>
                     <div  className='fixed h-16 flex justify-center items-center bg-[#092b3d]  bottom-0 w-3/4  right-0 '>
                         <form onSubmit={sendMessage} className='w-full flex justify-center items-center   '>
-                            <input
-                                value={formValue}
-                                className="  w-2/3 py-2 px-5  bg-[#0b3b55] rounded-md focus:outline-none"
-                                onChange={(e) => setFormValue(e.target.value)}>
-                            </input>
-                            <IoSend className='send-image relative right-10 bottom-1 cursor-pointer m-1 active:text-xl active:right-11' onClick={sendMessage} />
+                            <div className='input-wrapper w-2/3 relative'>
+                                <input
+                                    value={formValue}
+                                    className="w-full py-2 px-5  bg-[#0b3b55] rounded-md focus:outline-none"
+                                    onChange={(e) => setFormValue(e.target.value)}>
+                                </input>
+                                {
+                                // -- TODO: Expand button when clicked --
+                                // Using 'text-lg' helps, but the right is \
+                                // fixed to 0px and active button widens from left.
+                                }
+                                <IoSend className='send-image absolute right-5 top-1/2 tranform -translate-y-1/2 cursor-pointer' onClick={sendMessage} />
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -481,7 +605,6 @@ function Chatmessage(props) {
         const triggerRect = triggerRef.current.getBoundingClientRect();
     
         // Get the height of the popup
-        console.log(triggerRect);
         // Calculate the position and offset based on the trigger element's position
         if(triggerRect.bottom > 400){
             css.current.className ="-translate-x-1/3 translate-y-1/3 rounded-xl h-96 w-80 bg-slate-800 text-white flex  flex-col";
