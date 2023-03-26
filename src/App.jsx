@@ -91,6 +91,7 @@ function Signin() {
                 Name: auth.currentUser.displayName,
                 photoURL:auth.currentUser.photoURL,
                 About:'',
+                Firends:{}
                 });
             }
             });
@@ -463,7 +464,6 @@ const Chatroom = () => {
         e.preventDefault();
         const db = firebase.firestore();
         const userRef = db.collection("usersDetails");
-
         // Find all messages for the current user
         userRef.where("uid", "==", auth.currentUser.uid).get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
@@ -587,6 +587,22 @@ const Chatroom = () => {
 function Chatmessage(props) {
     const [user] = useAuthState(auth);
     const {Name,text, uid, image} = props.message;
+    let about;
+    
+    firestore.collection("usersDetails").get().then(model => {model.docs.forEach(doc => {
+        if(doc.data().uid == uid){
+            about = doc.data().About;
+            console.log(Name, about);
+            return;
+        }
+    })});
+    if(about == null){
+        about = 'suwar ki lindi';
+    }
+
+    // const about = userRef.forEach(usr => {
+    //     if(usr.uid == uid) return usr.About
+    // })
     const arrowStyle = { display: 'none' };
     
     const [isOpen, setIsOpen] = useState(false);
@@ -674,7 +690,7 @@ function Chatmessage(props) {
                     <div className='pb-3 text-lg font-bold'>{Name}</div>
                     <hr></hr>
                     <div className='pt-3 font-bold'>About Me</div>
-                    <div className='pt-1' >I'll be vibing shawty ;)</div>
+                    <div className='pt-1' >{about}</div>
                   </div>
                 </div>
               </Popup>
