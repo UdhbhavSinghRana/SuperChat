@@ -565,7 +565,7 @@ const Chatroom = () => {
                             <div className='input-wrapper w-2/3 relative'>
                                 <input
                                     value={formValue}
-                                    className="w-full py-2 px-5  bg-[#0b3b55] rounded-md focus:outline-none"
+                                    className="w-full py-2 pl-5 pr-12  bg-[#0b3b55] rounded-md focus:outline-none"
                                     onChange={(e) => setFormValue(e.target.value)}>
                                 </input>
                                 {
