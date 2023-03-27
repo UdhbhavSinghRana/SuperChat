@@ -587,19 +587,40 @@ const Chatroom = () => {
 function Chatmessage(props) {
     const [user] = useAuthState(auth);
     const {Name,text, uid, image} = props.message;
-    let about;
-    
-    firestore.collection("usersDetails").get().then(model => {model.docs.forEach(doc => {
-        if(doc.data().uid == uid){
-            about = doc.data().About;
-            console.log(Name, about);
-            return;
-        }
-    })});
-    if(about == null){
-        about = 'suwar ki lindi';
-    }
+    // let about;
 
+//   const getAbout = async () => {
+//     const model = await firestore.collection("usersDetails").get();
+//     model.docs.forEach((doc) => {
+//       if (doc.data().uid == uid) {
+//         about = doc.data().About;
+//         console.log(Name, about);
+//         // put the code that needs to access about here
+//         return;
+//       }
+//     });
+//     // if the code gets here, it means no document was found with matching uid
+//     if (about == null) {
+//       about = "null";
+//     }
+//   };
+
+//   getAbout();
+
+
+    // Testing for about section
+    const [about,setAbout] = useState('');
+        const getAbout = async () => {
+            const querySnapshot = await firestore.collection('usersDetails').get();
+            querySnapshot.docs.forEach(doc => {
+                if (doc.data().uid === uid) {
+                    setAbout(doc.data().About)
+                }
+            });
+        }
+
+        getAbout()
+    console.log(about)
     // const about = userRef.forEach(usr => {
     //     if(usr.uid == uid) return usr.About
     // })
