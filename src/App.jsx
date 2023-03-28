@@ -12,7 +12,7 @@ import Google from './assets/Google.svg';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { IoSend } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, where } from 'firebase/firestore';
 
 
 document.body.className = "scroll-smooth overflow-clip ";
@@ -62,7 +62,7 @@ function Signin() {
                 Name: name,
                 photoURL:auth.currentUser.photoURL,
                 About:'',
-                Friends:{},
+                Friends:[],
                 });
             }
             });
@@ -91,7 +91,7 @@ function Signin() {
                 Name: auth.currentUser.displayName,
                 photoURL:auth.currentUser.photoURL,
                 About:'',
-                Firends:{}
+                Firends:[]
                 });
             }
             });
@@ -587,43 +587,21 @@ const Chatroom = () => {
 function Chatmessage(props) {
     const [user] = useAuthState(auth);
     const {Name,text, uid, image} = props.message;
-    // let about;
 
-//   const getAbout = async () => {
-//     const model = await firestore.collection("usersDetails").get();
-//     model.docs.forEach((doc) => {
-//       if (doc.data().uid == uid) {
-//         about = doc.data().About;
-//         console.log(Name, about);
-//         // put the code that needs to access about here
-//         return;
-//       }
-//     });
-//     // if the code gets here, it means no document was found with matching uid
-//     if (about == null) {
-//       about = "null";
-//     }
-//   };
-
-//   getAbout();
-
-
-    // Testing for about section
     const [about,setAbout] = useState('');
+    const [frienduid , setFrienduid] = useState('');
         const getAbout = async () => {
             const querySnapshot = await firestore.collection('usersDetails').get();
             querySnapshot.docs.forEach(doc => {
                 if (doc.data().uid === uid) {
                     setAbout(doc.data().About)
+                    setFrienduid(doc.data().uid);
                 }
             });
         }
 
         getAbout()
     console.log(about)
-    // const about = userRef.forEach(usr => {
-    //     if(usr.uid == uid) return usr.About
-    // })
     const arrowStyle = { display: 'none' };
     
     const [isOpen, setIsOpen] = useState(false);
@@ -654,7 +632,28 @@ function Chatmessage(props) {
     
 
     const popupRef = useRef(null);
-
+    const addFriend = () => {
+        firestore.collection("usersDetails").get()
+            .then(querySnapshot => {
+                querySnapshot.docs.forEach(doc =>{
+                    console.log(doc.data().uid);
+                    if(doc.data().uid == auth.currentUser.uid){
+                        console.log(doc.data().Friends);
+                        console.log(frienduid);
+                        
+                        let FriendsArray = doc.data().Friends || []; // default to empty array if Friends is undefined
+                        FriendsArray.push(frienduid);
+                       if( !doc.data().Friends.includes(frienduid) ){
+                        firestore.collection("usersDetails").doc(doc.id).update({
+                            Friends: FriendsArray
+                        });
+                       }
+                        
+                        console.log(doc.data().Friends);
+                    }
+                })
+            })
+    }
     if( !image && uid === user.uid ){
         return(
             <div className='flex my-5 justify-end items-center '>
@@ -703,8 +702,7 @@ function Chatmessage(props) {
                   <div className='flex gap-20 items-center'>
                     <div className='-mt-12 px-3'><img src={image} className='rounded-full'></img></div>
                     <div className='bg-green-700 p-2 mt-2 rounded-lg hover:bg-green-900'>
-                        <button>Add Friend</button>
-                        
+                        <button onClick={addFriend}>Add Friend</button>
                     </div>
                   </div>
                   <div className='h-4/5 bg-slate-900 my-2 p-2 m-2 rounded-lg '>
