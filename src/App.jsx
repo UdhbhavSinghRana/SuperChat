@@ -378,7 +378,35 @@ const Chatroom = () => {
         })
     }, [lobbyUsers, searchQuery])
 
-  
+    const [dbfriend,setDbfriend] = useState([]);
+    
+    firestore.collection("usersDetails").get()
+        .then(querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+                if(doc.data().uid === auth.currentUser.uid){
+                    setDbfriend(doc.data().Friends);
+                }
+            })
+        })
+    console.log(dbfriend)
+    // dbfriend.map(uid => {
+    //     firestore.collection("usersDetails").get()
+    //     .then(querySnapshot => {
+    //         querySnapshot.docs.forEach(doc => {
+    //             if(doc.data().uid === uid){
+    //                 const singleUser = {
+    //                     id: doc.data().uid,
+    //                     name: doc.data().Name,
+    //                     desc: doc.data().About,
+    //                     image: doc.data().photoURL
+    //                 }
+
+    //                 setLobbyUsers(  [...lobbyUsers ,singleUser] )
+    //             }
+    //         })
+    //     })
+    // })
+    console.log(dbfriend);
     const inputRef = useRef(null);
     const edit = () => {
         inputRef.current.focus();
@@ -590,17 +618,17 @@ function Chatmessage(props) {
 
     const [about,setAbout] = useState('');
     const [frienduid , setFrienduid] = useState('');
-        const getAbout = async () => {
-            const querySnapshot = await firestore.collection('usersDetails').get();
-            querySnapshot.docs.forEach(doc => {
-                if (doc.data().uid === uid) {
-                    setAbout(doc.data().About)
-                    setFrienduid(doc.data().uid);
-                }
-            });
-        }
+    const getAbout = async () => {
+        const querySnapshot = await firestore.collection('usersDetails').get();
+        querySnapshot.docs.forEach(doc => {
+            if (doc.data().uid === uid) {
+                setAbout(doc.data().About)
+                setFrienduid(doc.data().uid);
+            }
+        });
+    }
 
-        getAbout()
+    getAbout()
     console.log(about)
     const arrowStyle = { display: 'none' };
     
