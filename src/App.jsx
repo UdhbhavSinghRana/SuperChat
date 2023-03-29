@@ -378,34 +378,40 @@ const Chatroom = () => {
         })
     }, [lobbyUsers, searchQuery])
 
-    const [dbfriend,setDbfriend] = useState([]);
-    
-    firestore.collection("usersDetails").get()
-        .then(querySnapshot => {
-            querySnapshot.docs.forEach(doc => {
-                if(doc.data().uid === auth.currentUser.uid){
-                    setDbfriend(doc.data().Friends);
-                }
-            })
-        })
-    console.log(dbfriend)
-    // dbfriend.map(uid => {
-    //     firestore.collection("usersDetails").get()
-    //     .then(querySnapshot => {
-    //         querySnapshot.docs.forEach(doc => {
-    //             if(doc.data().uid === uid){
-    //                 const singleUser = {
-    //                     id: doc.data().uid,
-    //                     name: doc.data().Name,
-    //                     desc: doc.data().About,
-    //                     image: doc.data().photoURL
-    //                 }
+    const [dbfriend, setDbfriend] = useState([]);
 
-    //                 setLobbyUsers(  [...lobbyUsers ,singleUser] )
-    //             }
-    //         })
-    //     })
-    // })
+
+useEffect(() => {
+    const fetchData = async () => {
+        const querySnapshot = await firestore
+            .collection("usersDetails")
+            .where("uid", "==", auth.currentUser.uid)
+            .get();
+
+        const userData = querySnapshot.docs[0].data();
+        setDbfriend(userData.Friends);
+
+        const userPromises = userData.Friends.map(async (uid) => {
+            const userSnapshot = await firestore
+                .collection("usersDetails")
+                .where("uid", "==", uid)
+                .get();
+            const userData = userSnapshot.docs[0].data();
+            return {
+                id: userData.uid,
+                name: userData.Name,
+                desc: userData.About,
+                image: userData.photoURL,
+            }; 
+        });
+
+        const users = await Promise.all(userPromises); 
+        setLobbyUsers(users);
+        console.log("hello")
+    };
+
+    fetchData();
+}, [  ]); 
     console.log(dbfriend);
     const inputRef = useRef(null);
     const edit = () => {
