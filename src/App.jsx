@@ -553,36 +553,45 @@ useEffect(() => {
                     </button>
                     Profile
                 </div>
-                <div className='flex flex-col w-full py-10 ' >
-                    <div className='flex justify-center items-center'>
-                        <div className=' absolute hover:bg-[#424749] hover:bg-opacity-60 hover:text-white hover:text hover:text-opacity-100 opacity-0 hover:opacity-100 flex justify-center items-center rounded-full    h-24 w-24'>
+                {/* Account detail */}
+                <div className='flex flex-col gap-5 py-10 px-5' >
+                    {/* Profile image  */}
+                    <div className='m-auto'>
+                        <div className='absolute hover:bg-[#424749] hover:bg-opacity-60 hover:text-white hover:text hover:text-opacity-100 opacity-0 hover:opacity-100 flex justify-center items-center rounded-full h-24 w-24 hover:cursor-pointer'>
                             <img src='https://cdn-icons-png.flaticon.com/512/685/685655.png' className='h-7'></img>
                         </div>
-                        <img src={img} className='rounded-full h-24  '></img>
+                        <img src={img} className='rounded-full h-24 w-24'></img>
                     </div>
-                    <div className='flex pt-7 w-full'>
-                        <form onSubmit={ChangeName} className='flex justify-center items-center w-full'>
-                            <div className='relative z-0  px-2 w-full group'>
-                            <label ref={labelRef} for="first_name" class="z-10 bg-[#0b3b55]  font-mono  font-bold  text-md  text-slate-300 transform ease-in-out  absolute px-1  -translate-y-3  translate-x-3 duration-200 w-auto text-sm"> Name </label>
-                                <input value={usrname}  className='rounded-lg border-slate-800 border-2 bg-transparent relative w-11/12 p-2  object   focus:outline-none' ref={inputRef} onChange={NameChng}></input>
-                            </div>
-                        </form>
-                    </div>
-                    <div className='flex pt-7 w-full'>
+
+                    {/* Input values section */}
+                    <div className='input-values flex flex-col mt-3 gap-5'>
+                        {/* User name */}
+                            <form onSubmit={ChangeName} className='flex justify-center items-center w-full'>
+                                <div className='relative z-0  px-2 w-full group'>
+                                <label ref={labelRef} for="first_name" class="z-10 bg-[#0b3b55]  font-mono  font-bold  text-md  text-slate-300 transform ease-in-out  absolute px-1  -translate-y-3  translate-x-3 duration-200 w-auto text-sm"> Name </label>
+                                    <input value={usrname}  className='rounded-lg border-slate-800 border-2 bg-transparent relative w-full p-2 object focus:outline-none' ref={inputRef} onChange={NameChng}></input>
+                                </div>
+                            </form>
+            
+                        {/* User bio */}
                         <form onSubmit={AboutChng} className='flex justify-center items-center w-full'>
                             <div className='relative z-0  px-2 w-full group'>
                             <label  ref={AboutRef} class="z-10 bg-[#0b3b55]  font-mono  font-bold  text-md  text-slate-300 transform ease-in-out  absolute px-1  -translate-y-3  translate-x-3 duration-200 w-auto text-sm"> Bio </label>
-                                <input value={aboutval}  className='rounded-lg border-slate-800 border-2 bg-transparent relative w-11/12 p-2  object   focus:outline-none' ref={inputRef} onChange={abouttempChng}></input>
+                                <input value={aboutval}  className='rounded-lg border-slate-800 border-2 bg-transparent relative w-full p-2  object   focus:outline-none' ref={inputRef} onChange={abouttempChng}></input>
                             </div>
                         </form>
                     </div>
-                    <div className='text-slate-400 '>
-                   
+
+                    {/* User email */} 
+                    <div className='text-slate-400 m-auto'>
                         {user.email}
                     </div>
-                    <div className='my-7 p-2 bg-slate-500 rounded-lg hover:bg-slate-600'>
-                        <button onClick={() => {auth.signOut()}}>SignOut</button>
-                    </div>
+
+                    {/* Sign Out button */}
+                    <button
+                        className='bg-[#6c757d] text-[#fff] rounded-lg py-3 text-center hover:bg-[#5a6268] hover:cursor-pointer'
+                        onClick={() => {auth.signOut()}}
+                    >SignOut</button>
                 </div>
             </div>
             <div className='flex flex-col items-end px-20'>
